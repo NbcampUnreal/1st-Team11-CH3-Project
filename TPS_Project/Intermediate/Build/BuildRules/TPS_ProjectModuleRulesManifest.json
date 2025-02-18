@@ -1,0 +1,9 @@
+{
+	"SourceFiles": [
+		"D:\\git-work-space\\TPS_Project\\1st-Team11-CH3-Project\\TPS_Project\\Source\\TPS_Project\\TPS_Project.Build.cs",
+		"D:\\git-work-space\\TPS_Project\\1st-Team11-CH3-Project\\TPS_Project\\Plugins\\UEGitPlugin-3.16\\UEGitPlugin-3.16\\Source\\GitSourceControl\\GitSourceControl.Build.cs",
+		"D:\\git-work-space\\TPS_Project\\1st-Team11-CH3-Project\\TPS_Project\\Source\\TPS_Project.Target.cs",
+		"D:\\git-work-space\\TPS_Project\\1st-Team11-CH3-Project\\TPS_Project\\Source\\TPS_ProjectEditor.Target.cs"
+	],
+	"EngineVersion": "5.4.4"
+}

@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-TPS_Project.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\git-work-space\TPS_Project\1st-Team11-CH3-Project\TPS_Project\Intermediate\Build\Win64\x64\TPS_ProjectEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"D:\git-work-space\TPS_Project\1st-Team11-CH3-Project\TPS_Project\Intermediate\Build\Win64\x64\UnrealEditor\Development\TPS_Project\TPS_Project.cpp.obj"
+"D:\git-work-space\TPS_Project\1st-Team11-CH3-Project\TPS_Project\Intermediate\Build\Win64\x64\UnrealEditor\Development\TPS_Project\Default.rc2.res"
+/OUT:"D:\git-work-space\TPS_Project\1st-Team11-CH3-Project\TPS_Project\Intermediate\Build\Win64\x64\UnrealEditor\Development\TPS_Project\UnrealEditor-TPS_Project.lib"

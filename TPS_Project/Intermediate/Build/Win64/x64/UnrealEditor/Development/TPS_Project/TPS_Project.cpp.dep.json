@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\git-work-space\\tps_project\\1st-team11-ch3-project\\tps_project\\source\\tps_project\\tps_project.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\git-work-space\\tps_project\\1st-team11-ch3-project\\tps_project\\intermediate\\build\\win64\\x64\\tps_projecteditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\git-work-space\\tps_project\\1st-team11-ch3-project\\tps_project\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\tps_project\\definitions.tps_project.h",
+            "d:\\git-work-space\\tps_project\\1st-team11-ch3-project\\tps_project\\source\\tps_project\\tps_project.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
