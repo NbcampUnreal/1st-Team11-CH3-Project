@@ -23,7 +23,6 @@ AMainCharacter::AMainCharacter()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
 	NormalSpeed = 600.0f;
-
 }
 
 // Called when the game starts or when spawned
