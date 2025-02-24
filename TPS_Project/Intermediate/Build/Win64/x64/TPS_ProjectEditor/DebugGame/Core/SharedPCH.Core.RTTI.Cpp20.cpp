@@ -1,2 +1,0 @@
-// Compiler: 14.38.33144
-#include "D:/git-work-space/TPS_Project/1st-Team11-CH3-Project/TPS_Project/Intermediate/Build/Win64/x64/TPS_ProjectEditor/DebugGame/Core/SharedPCH.Core.RTTI.Cpp20.h"
