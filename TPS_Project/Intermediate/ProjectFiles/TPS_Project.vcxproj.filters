@@ -162,5 +162,29 @@
     <ClInclude Include="..\..\Source\TPS_Project\TPS_Project.h">
       <Filter>Source\TPS_Project</Filter>
     </ClInclude>
+    <Filter Include="Source\TPS_Project\Private">
+      <UniqueIdentifier>{CF525677-266F-304A-BAC6-7E2E9552E702}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\TPS_Project\Private\MainCharacter.cpp">
+      <Filter>Source\TPS_Project\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TPS_Project\Private\MainGameMode.cpp">
+      <Filter>Source\TPS_Project\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TPS_Project\Private\MainPlayerController.cpp">
+      <Filter>Source\TPS_Project\Private</Filter>
+    </ClCompile>
+    <Filter Include="Source\TPS_Project\Public">
+      <UniqueIdentifier>{AB36113A-2D03-3EEA-BC24-E540371CA7DC}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\TPS_Project\Public\MainCharacter.h">
+      <Filter>Source\TPS_Project\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TPS_Project\Public\MainGameMode.h">
+      <Filter>Source\TPS_Project\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TPS_Project\Public\MainPlayerController.h">
+      <Filter>Source\TPS_Project\Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
