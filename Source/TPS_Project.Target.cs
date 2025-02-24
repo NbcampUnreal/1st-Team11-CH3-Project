@@ -1,3 +1,4 @@
+
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
@@ -13,3 +14,4 @@ public class TPS_ProjectTarget : TargetRules
 		ExtraModuleNames.Add("TPS_Project");
 	}
 }
+
