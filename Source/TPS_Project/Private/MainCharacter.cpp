@@ -23,6 +23,8 @@ AMainCharacter::AMainCharacter()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
 	NormalSpeed = 600.0f;
+
+	Tags.Add(TEXT("Player"));
 }
 
 // Called when the game starts or when spawned

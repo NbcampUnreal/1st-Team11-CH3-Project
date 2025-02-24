@@ -32,7 +32,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	UStaticMeshComponent* StaticMesh;
 
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	float NormalSpeed;
 public:
