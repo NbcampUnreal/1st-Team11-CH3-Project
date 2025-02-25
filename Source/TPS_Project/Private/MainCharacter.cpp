@@ -24,7 +24,6 @@ AMainCharacter::AMainCharacter()
 
 	NormalSpeed = 600.0f;
 
-	Tags.Add(TEXT("Player"));
 }
 
 // Called when the game starts or when spawned
