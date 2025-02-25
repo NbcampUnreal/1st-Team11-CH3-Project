@@ -67,9 +67,16 @@ public:
 	UFUNCTION ()
 	void StopGunFire (const FInputActionValue& Value);
 
+	float GetCharacterHealth() const;
+
+	void SetCharacterHealth(float Value);
+	
+
 	UFUNCTION(BlueprintCallable)
 	void PlayDamageAnim();
 
 	void Fire();
 	void Temp();
+private:
+	float Health;
 };
