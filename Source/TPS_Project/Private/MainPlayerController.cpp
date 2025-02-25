@@ -4,7 +4,7 @@
 #include "MainPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 
-AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr)
+AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), GunFireAction(nullptr)
 {
 }
 
