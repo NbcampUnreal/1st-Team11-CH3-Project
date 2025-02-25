@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -35,6 +35,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	float NormalSpeed;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* FireMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category="Animation")
+	UAnimMontage* HitMontage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
+	bool IsFire;
+
+	FTimerHandle FireTimer;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,8 +62,11 @@ public:
 	void StartJump(const FInputActionValue& Value);
 	UFUNCTION()
 	void StopJump(const FInputActionValue& Value);
-
 	UFUNCTION()
 	void GunFire(const FInputActionValue& Value);
+	UFUNCTION ()
+	void StopGunFire (const FInputActionValue& Value);
 
+	void Fire();
+	void Temp();
 };
