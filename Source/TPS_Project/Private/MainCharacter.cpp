@@ -54,6 +54,7 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 
 	AddControllerYawInput(LookInput.X);
 	SpringArm->SetRelativeRotation(FRotator(LookInput.Y + SpringArm->GetDesiredRotation().Pitch, 0, 0));
+	SpringArm->SetRelativeRotation(FRotator(0, LookInput.X + SpringArm->GetDesiredRotation().Yaw, 0));
 	//AddControllerPitchInput(LookInput.Y);
 }
 
@@ -70,6 +71,14 @@ void AMainCharacter::StopJump(const FInputActionValue& Value)
 	if (!Value.Get<bool>())
 	{
 		StopJumping();
+	}
+}
+
+void AMainCharacter::GunFire(const FInputActionValue& Value)
+{
+	if (Value.Get<bool>())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gun Fire"));
 	}
 }
 
@@ -93,5 +102,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Triggered, this, &AMainCharacter::StartJump);
 	EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Completed, this, &AMainCharacter::StopJump);
 	EnhancedInput->BindAction(PlayerController->LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
+	EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
 }
 
