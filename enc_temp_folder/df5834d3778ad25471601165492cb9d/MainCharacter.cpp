@@ -56,7 +56,7 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 	AddControllerYawInput(LookInput.X);
 	SpringArm->SetRelativeRotation(FRotator(LookInput.Y + SpringArm->GetDesiredRotation().Pitch, 0, 0));
 	//SpringArm->SetRelativeRotation(FRotator(0, LookInput.X + SpringArm->GetDesiredRotation().Yaw, 0));
-	//AddControllerPitchInput(LookInput.Y);
+	AddControllerPitchInput(LookInput.Y);
 }
 
 void AMainCharacter::StartJump(const FInputActionValue& Value)
@@ -93,7 +93,6 @@ void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 
 void AMainCharacter::PlayDamageAnim()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Play Damage Anim"));
 	UAnimInstance* AnimInstance=GetMesh()->GetAnimInstance();
 
 	if (AnimInstance && HitMontage)

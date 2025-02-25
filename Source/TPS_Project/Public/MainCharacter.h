@@ -67,6 +67,9 @@ public:
 	UFUNCTION ()
 	void StopGunFire (const FInputActionValue& Value);
 
+	UFUNCTION(BlueprintCallable)
+	void PlayDamageAnim();
+
 	void Fire();
 	void Temp();
 };
