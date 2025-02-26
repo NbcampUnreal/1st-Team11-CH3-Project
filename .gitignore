@@ -78,3 +78,5 @@ DerivedDataCache/*
 
 #Map Ignore
 /Content/Maps/*
+/Content/Blueprints/BP_MainCharacter.uasset
+/Content/Maps/TestMap.umap
