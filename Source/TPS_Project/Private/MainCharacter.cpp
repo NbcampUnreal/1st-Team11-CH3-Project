@@ -16,6 +16,9 @@ AMainCharacter::AMainCharacter()
 	//FAttachmentTransformRules AttachmentRules ( EAttachmentRule::SnapToTarget , true );
 	StaticMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
 
+    MuzzleFlash = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
+    MuzzleFlash->SetupAttachment(StaticMesh);
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 300.0f;
@@ -151,6 +154,12 @@ void AMainCharacter::Temp()
 	{
 		AnimInstance->Montage_Play(FireMontage);
 	}
+}
+
+void AMainCharacter::TestFire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Gun Fire!!!!"));
+    MuzzleFlash->Activate();
 }
 
 // Called every frame
