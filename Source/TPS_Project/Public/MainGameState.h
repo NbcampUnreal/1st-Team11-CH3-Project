@@ -16,9 +16,9 @@ protected:
 	int32 WaveCount;
 	int32 MaxWaveCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Wave")
-	float WaveInterval;			// Wave °£°Ý
+	float WaveInterval;			// Wave ê°„ê²©
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Level")
-	float DefenceTime;			// ¹öÅß¾ßÇÒ ½Ã°£
+	float DefenceTime;			// ë²„í…¨ì•¼í•  ì‹œê°„
 
 	FTimerHandle LevelTimerHandle;
 	FTimerHandle WaveStartTimerHandle;

@@ -19,14 +19,19 @@ void AMainGameState::BeginPlay()
 
 void AMainGameState::StartGame()
 {
-	// Wave Å¸ÀÌ¸Ó
+	// Wave íƒ€ì´ë¨¸
 	GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
 
-	// Defence Å¸ÀÌ¸Ó
+	// Defence íƒ€ì´ë¨¸
 	GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::LevelTimeUp, DefenceTime, false);
+
+	// TODO; HUD ë³´ì´ê²Œ í•˜ëŠ” ì½”ë“œ..
+	//...
+
+
 }
 
-// ½ºÆù ÁÖ±â °¨¼Ò -> ¸¶¸® ¼ö Áõ°¡
+// ìŠ¤í° ì£¼ê¸° ê°ì†Œ -> ë§ˆë¦¬ ìˆ˜ ì¦ê°€
 void AMainGameState::StartWave()
 {
 	if (WaveCount >= MaxWaveCount)
@@ -44,7 +49,7 @@ void AMainGameState::StartWave()
 			AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume);
 			if (ZombieSpawnVolume)
 			{
-				// ½ºÆù ÁÖ±â °¨¼Ò
+				// ìŠ¤í° ì£¼ê¸° ê°ì†Œ
 				ZombieSpawnVolume->SpawnInterval = 1.0f;
 			}
 		}
@@ -55,7 +60,7 @@ void AMainGameState::StartWave()
 	GetWorldTimerManager().SetTimer(WaveEndTimerHandle, this, &AMainGameState::EndWave, FMath::CeilToFloat(WaveInterval / 3.0f), false);
 }
 
-// ½ºÆù ÁÖ±â Á¤»óÈ­ -> ¸¶¸® ¼ö °¨¼Ò
+// ìŠ¤í° ì£¼ê¸° ì •ìƒí™” -> ë§ˆë¦¬ ìˆ˜ ê°ì†Œ
 void AMainGameState::EndWave()
 {
 	if (WaveCount >= MaxWaveCount)
@@ -73,7 +78,7 @@ void AMainGameState::EndWave()
 			AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume);
 			if (ZombieSpawnVolume)
 			{
-				// ½ºÆù ÁÖ±â Á¤»óÈ­
+				// ìŠ¤í° ì£¼ê¸° ì •ìƒí™”
 				ZombieSpawnVolume->SpawnInterval = 2.0f;
 			}
 		}
@@ -91,7 +96,7 @@ void AMainGameState::LevelTimeUp()
 			AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume);
 			if (ZombieSpawnVolume)
 			{
-				// Á¦ÇÑ ½Ã°£ ³¡³ª¸é ½ºÆù ¾ÈµÇµµ·Ï
+				// ì œí•œ ì‹œê°„ ëë‚˜ë©´ ìŠ¤í° ì•ˆë˜ë„ë¡
 				ZombieSpawnVolume->bIsSpawn = false;
 			}
 		}
@@ -103,4 +108,7 @@ void AMainGameState::LevelTimeUp()
 void AMainGameState::GameOver()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Game Over!")));
+
+	// todo; ê²Œì„ì˜¤ë²„ì‹œ ë©”ì¸ë©”ë‰´ë³´ì´ê²Œ? ...
+
 }
