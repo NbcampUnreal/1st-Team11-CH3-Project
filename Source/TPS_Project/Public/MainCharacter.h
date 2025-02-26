@@ -35,6 +35,21 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	float NormalSpeed;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* FireMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category="Animation")
+	UAnimMontage* HitMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category="Animation")
+	UAnimMontage* ReloadMontage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
+	bool IsFire;
+
+	FTimerHandle FireTimer;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,5 +65,26 @@ public:
 	void StartJump(const FInputActionValue& Value);
 	UFUNCTION()
 	void StopJump(const FInputActionValue& Value);
+	UFUNCTION()
+	void GunFire(const FInputActionValue& Value);
+	UFUNCTION ()
+	void StopGunFire (const FInputActionValue& Value);
 
+	UFUNCTION()
+	void Reload(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void PlayDamageAnim();
+
+	float GetCharacterHealth() const;
+
+	void SetCharacterHealth(float Value);
+	
+	void InitAnimation();
+
+	void Fire();
+	void Temp();
+private:
+	float Health;
+	int Ammo;
 };
