@@ -116,12 +116,11 @@ void AMainCharacter::InitAnimation()
 {
 	if (FireMontage)
 	{
-		const auto NotifyEvents=FireMontage->Notifies;
+        const auto &NotifyEvents = FireMontage->Notifies;
 
-		for (auto Notify:NotifyEvents)
+        for (auto &Notify : NotifyEvents)
 		{
-            FName Name = Notify.GetNotifyEventName();
-            UE_LOG(LogTemp, Warning, TEXT("%s"), *Name.ToString());
+            
 		}
 	}
 }
