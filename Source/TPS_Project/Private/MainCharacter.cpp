@@ -31,7 +31,7 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+    InitAnimation();
 }
 
 void AMainCharacter::Move(const FInputActionValue& Value)
@@ -92,6 +92,17 @@ void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 	GetWorldTimerManager().ClearTimer(FireTimer);
 }
 
+void AMainCharacter::Reload(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Reload"));
+	UAnimInstance* AnimInstance=GetMesh()->GetAnimInstance();
+
+	if ( AnimInstance && ReloadMontage )
+	{
+		AnimInstance->Montage_Play(ReloadMontage);
+	}
+}
+
 float AMainCharacter::GetCharacterHealth() const
 {
 	return Health;
@@ -100,6 +111,20 @@ float AMainCharacter::GetCharacterHealth() const
 void AMainCharacter::SetCharacterHealth(float Value)
 {
 	Health += Value;
+}
+
+void AMainCharacter::InitAnimation()
+{
+	if (FireMontage)
+	{
+		const auto NotifyEvents=FireMontage->Notifies;
+
+		for (auto Notify:NotifyEvents)
+		{
+            FName Name = Notify.GetNotifyEventName();
+            UE_LOG(LogTemp, Warning, TEXT("%s"), *Name.ToString());
+		}
+	}
 }
 
 void AMainCharacter::PlayDamageAnim()
@@ -150,5 +175,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInput->BindAction(PlayerController->LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 	EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
 	EnhancedInput->BindAction(PlayerController->GunFireAction , ETriggerEvent::Completed , this , &AMainCharacter::StopGunFire);
+	EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacter::Reload);
 }
 
