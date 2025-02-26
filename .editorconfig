@@ -1,0 +1,47 @@
+# Visual Studio C++ 기본 설정
+root = true
+
+[*.{c++,cc,cpp,cppm,cxx,h,h++,hh,hpp,hxx,inl,ipp,ixx,tlh,tli}]
+charset = utf-8
+
+# 들여쓰기 설정
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# 중괄호 (Braces) 줄바꿈 설정
+cpp_new_line_before_open_brace_namespace = false
+cpp_new_line_before_open_brace_type = false
+cpp_new_line_before_open_brace_function = false
+cpp_new_line_before_open_brace_block = false
+cpp_new_line_before_open_brace_lambda = false
+cpp_new_line_before_else = true
+cpp_new_line_before_catch = true
+cpp_new_line_before_while_in_do_while = false
+
+# 공백 (Spacing) 설정
+cpp_space_before_function_open_parenthesis = false
+cpp_space_within_parameter_list_parentheses = false
+cpp_space_after_keywords_in_control_flow_statements = true
+cpp_space_within_control_flow_statement_parentheses = false
+cpp_space_before_lambda_open_parenthesis = false
+cpp_space_within_expression_parentheses = false
+cpp_space_before_block_open_brace = true
+cpp_space_before_comma = false
+cpp_space_after_comma = true
+cpp_space_before_colon = false
+cpp_space_after_colon = true
+cpp_space_before_semicolon = false
+cpp_space_after_semicolon = true
+cpp_space_around_binary_operator = single
+cpp_space_around_assignment_operator = single
+cpp_space_pointer_reference_alignment = right
+cpp_space_around_ternary_operator = single
+
+# 정리 (Include Cleanup) 설정
+cpp_include_cleanup_remove_unused_error_tag_type = dimmed
+cpp_include_cleanup_sort_after_edits = true
+cpp_sort_includes_error_tag_type = none
+cpp_sort_includes_priority_case_sensitive = false
+cpp_sort_includes_priority_style = quoted
+cpp_includes_use_forward_slash = true
