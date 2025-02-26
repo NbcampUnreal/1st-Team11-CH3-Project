@@ -14,7 +14,8 @@ class TPS_PROJECT_API AEnemyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
-
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
+	TArray<AActor*> PatrolPoints;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
