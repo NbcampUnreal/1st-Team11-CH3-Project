@@ -1,4 +1,5 @@
 [/Script/UnrealEd.EditorLoadingSavingSettings]
 bSCCAutoAddNewFiles=False
 bAutomaticallyCheckoutOnAssetModification=True
+
 bPromptForCheckoutOnAssetModification=False

@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "MainCharacter.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -23,6 +26,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	UCameraComponent* Camera;
 
@@ -32,7 +37,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	UStaticMeshComponent* StaticMesh;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    UNiagaraComponent* MuzzleFlash;
 
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	float NormalSpeed;
 
@@ -84,6 +92,7 @@ public:
 
 	void Fire();
 	void Temp();
+	void TestFire();
 private:
 	float Health;
 	int Ammo;
