@@ -42,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Animation")
 	UAnimMontage* HitMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category="Animation")
+	UAnimMontage* ReloadMontage;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
 	bool IsFire;
 
@@ -67,16 +70,21 @@ public:
 	UFUNCTION ()
 	void StopGunFire (const FInputActionValue& Value);
 
+	UFUNCTION()
+	void Reload(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void PlayDamageAnim();
+
 	float GetCharacterHealth() const;
 
 	void SetCharacterHealth(float Value);
 	
-
-	UFUNCTION(BlueprintCallable)
-	void PlayDamageAnim();
+	void InitAnimation();
 
 	void Fire();
 	void Temp();
 private:
 	float Health;
+	int Ammo;
 };
