@@ -140,6 +140,11 @@ void AMainCharacter::PlayDamageAnim()
 	}
 }
 
+float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
+{
+    return 0.0f;
+}
+
 void AMainCharacter::Fire()
 {
 	GetWorldTimerManager().SetTimer(FireTimer , this , &AMainCharacter::Temp, 0.2f , true );
