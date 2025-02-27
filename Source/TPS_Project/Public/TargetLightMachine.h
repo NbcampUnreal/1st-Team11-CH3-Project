@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "TargetLightMachine.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
 class TPS_PROJECT_API ATargetLightMachine : public AActor
 {
@@ -17,10 +19,13 @@ protected:
 	USceneComponent* Scene;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target|Component")
 	UStaticMeshComponent* StaticMeshComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Target|Component")
+	UBoxComponent* BoxCollision;
 
-	float Health;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Target|Health")
 	float MaxHealth;
-
+	float Health;
+	
 protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 

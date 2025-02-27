@@ -11,7 +11,7 @@ AZombieSpawnVolume::AZombieSpawnVolume()
 	SpawningBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawningBox"));
 	SpawningBox->SetupAttachment(Scene);
 
-	bIsSpawn = true;
+	bIsSpawn = false;
 	SpawnInterval = 2.0f;
 
 	ZombieDataTable = nullptr;
@@ -70,7 +70,7 @@ FZombieSpawnRow* AZombieSpawnVolume::GetRandomZombie() const
 		return nullptr;
 	}
 
-	// ¸ğµç µ¥ÀÌÅÍ(Row) °¡Á®¿À±â
+	// ëª¨ë“  ë°ì´í„°(Row) ê°€ì ¸ì˜¤ê¸°
 	TArray<FZombieSpawnRow*> AllRows;
 	static const FString ContextString(TEXT("ZombieSpawnText"));
 	ZombieDataTable->GetAllRows(ContextString, AllRows);
@@ -80,7 +80,7 @@ FZombieSpawnRow* AZombieSpawnVolume::GetRandomZombie() const
 		return nullptr;
 	}
 
-	// ÀüÃ¼ ½ºÆù È®·ü ±¸ÇÏ±â
+	// ì „ì²´ ìŠ¤í° í™•ë¥  êµ¬í•˜ê¸°
 	float TotalChance = 0.0f;
 	for (const FZombieSpawnRow* Row : AllRows)
 	{

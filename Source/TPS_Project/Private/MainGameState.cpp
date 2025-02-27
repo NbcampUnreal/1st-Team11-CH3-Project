@@ -8,44 +8,51 @@ AMainGameState::AMainGameState()
 	MaxWaveCount = 5;
 	WaveInterval = 10.0f;
 	DefenceTime = 60.0f;
+    CurrentLevel = "";
 }
 
 void AMainGameState::BeginPlay()
 {
 	Super::BeginPlay();
 
+    CurrentLevel = "DefenceLevel";
+
 	StartGame();
 }
 
 void AMainGameState::StartGame()
 {
-	// Wave Å¸ÀÌ¸Ó
-	GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
+    WaveCount = 0;
 
-	// Defence Å¸ÀÌ¸Ó
-	GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::LevelTimeUp, DefenceTime, false);
+    if (CurrentLevel == "DefenceLevel")
+    {
+        // Defence Levelì˜ Defence íƒ€ì´ë¨¸
+        GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::DefenceLevelTimeUp, DefenceTime, false);
+    }
+
+    // Wave íƒ€ì´ë¨¸
+    GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
 }
 
-// ½ºÆù ÁÖ±â °¨¼Ò -> ¸¶¸® ¼ö Áõ°¡
+// ìŠ¤í° ì£¼ê¸° ê°ì†Œ -> ë§ˆë¦¬ ìˆ˜ ì¦ê°€
 void AMainGameState::StartWave()
 {
-	if (WaveCount >= MaxWaveCount)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(WaveStartTimerHandle);
-		return;
-	}
+    if (WaveCount >= MaxWaveCount)
+    {
+        GetWorld()->GetTimerManager().ClearTimer(WaveStartTimerHandle);
+        return;
+    }
 
-	TArray<AActor*> SpawnVolumes;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMainGameState::StaticClass(), SpawnVolumes);
-	if (SpawnVolumes.Num() > 0)
+    if (SpawnVolumesByLevel[CurrentLevel].Actors.Num() > 0)
 	{
-		for (AActor* SpawnVolume : SpawnVolumes)
+        for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumesByLevel[CurrentLevel].Actors)
 		{
-			AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume);
-			if (ZombieSpawnVolume)
+            // LoadSynchronous()ëŠ” ì•¡í„°ë¥¼ ë¡œë“œí•˜ëŠ” ê²ƒ
+            //AActor* SpawnVolume = SoftSpawnVolume.LoadSynchronous();
+            AActor* SpawnVolume = SoftSpawnVolume.Get();
+			if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
 			{
-				// ½ºÆù ÁÖ±â °¨¼Ò
-				ZombieSpawnVolume->SpawnInterval = 1.0f;
+                ZombieSpawnVolume->SpawnInterval = 1.0f;
 			}
 		}
 	}
@@ -55,7 +62,7 @@ void AMainGameState::StartWave()
 	GetWorldTimerManager().SetTimer(WaveEndTimerHandle, this, &AMainGameState::EndWave, FMath::CeilToFloat(WaveInterval / 3.0f), false);
 }
 
-// ½ºÆù ÁÖ±â Á¤»óÈ­ -> ¸¶¸® ¼ö °¨¼Ò
+// ìŠ¤í° ì£¼ê¸° ì •ìƒí™” -> ë§ˆë¦¬ ìˆ˜ ê°ì†Œ
 void AMainGameState::EndWave()
 {
 	if (WaveCount >= MaxWaveCount)
@@ -64,43 +71,40 @@ void AMainGameState::EndWave()
 		return;
 	}
 
-	TArray<AActor*> SpawnVolumes;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AZombieSpawnVolume::StaticClass(), SpawnVolumes);
-	if (SpawnVolumes.Num() > 0)
-	{
-		for (AActor* SpawnVolume : SpawnVolumes)
-		{
-			AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume);
-			if (ZombieSpawnVolume)
-			{
-				// ½ºÆù ÁÖ±â Á¤»óÈ­
-				ZombieSpawnVolume->SpawnInterval = 2.0f;
-			}
-		}
-	}
+    if (SpawnVolumesByLevel[CurrentLevel].Actors.Num() > 0)
+    {
+        for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumesByLevel[CurrentLevel].Actors)
+        {
+            AActor* SpawnVolume = SoftSpawnVolume.Get();
+            if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
+            {
+                ZombieSpawnVolume->SpawnInterval = 2.0f;
+            }
+        }
+    }
 }
 
-void AMainGameState::LevelTimeUp()
+void AMainGameState::DefenceLevelTimeUp()
 {
-	TArray<AActor*> SpawnVolumes;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AZombieSpawnVolume::StaticClass(), SpawnVolumes);
-	if (SpawnVolumes.Num() > 0)
+	if (DefenceLevelSpawnVolumes.Num() > 0)
 	{
-		for (AActor* SpawnVolume : SpawnVolumes)
+		for (AActor* SpawnVolume : DefenceLevelSpawnVolumes)
 		{
-			AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume);
-			if (ZombieSpawnVolume)
+			if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
 			{
-				// Á¦ÇÑ ½Ã°£ ³¡³ª¸é ½ºÆù ¾ÈµÇµµ·Ï
-				ZombieSpawnVolume->bIsSpawn = false;
+				// ì œí•œ ì‹œê°„ ëë‚˜ë©´ ìŠ¤í° ì•ˆë˜ë„ë¡
+                ZombieSpawnVolume->bIsSpawn = false;
 			}
 		}
 	}
-
-	GameOver();
 }
 
 void AMainGameState::GameOver()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Game Over!")));
+}
+
+void AMainGameState::SetCurrentLevel(FString LevelName)
+{
+    CurrentLevel = LevelName;
 }

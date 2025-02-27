@@ -1,5 +1,6 @@
 #include "TargetLightMachine.h"
 #include "MainGameState.h"
+#include "Components/BoxComponent.h"
 
 ATargetLightMachine::ATargetLightMachine()
 {
@@ -10,6 +11,9 @@ ATargetLightMachine::ATargetLightMachine()
 
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComp"));
 	StaticMeshComp->SetupAttachment(Scene);
+
+	BoxCollision=CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BoxCollision->SetupAttachment(Scene);
 
 	MaxHealth = 5000.0f;
 	Health = MaxHealth;
