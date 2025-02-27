@@ -13,6 +13,6 @@ void UGunFireAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 
 	if (MainCharacter)
 	{
-		MainCharacter->TestFire();
+		MainCharacter->ActivateMuzzle();
 	}
 }

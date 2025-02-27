@@ -84,7 +84,8 @@ void AMainCharacter::GunFire(const FInputActionValue& Value)
 	if (Value.Get<bool>())
 	{
 		IsFire = Value.Get<bool>();
-		Fire();
+		//Fire();
+        GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
 	}
 }
 
@@ -131,7 +132,7 @@ void AMainCharacter::InitAnimation()
 
 void AMainCharacter::PlayDamageAnim()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Play Damage Anim"));
+	//UE_LOG(LogTemp, Warning, TEXT("Play Damage Anim"));
 	UAnimInstance* AnimInstance=GetMesh()->GetAnimInstance();
 
 	if (AnimInstance && HitMontage)
@@ -147,10 +148,11 @@ float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const &DamageE
 
 void AMainCharacter::Fire()
 {
-	GetWorldTimerManager().SetTimer(FireTimer , this , &AMainCharacter::Temp, 0.2f , true );
+    UE_LOG(LogTemp, Warning, TEXT("FIRE"));
+	GetWorldTimerManager().SetTimer(FireTimer , this , &AMainCharacter::GunShotAnimation, 0.2f , true );
 }
 
-void AMainCharacter::Temp()
+void AMainCharacter::GunShotAnimation()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
@@ -160,9 +162,9 @@ void AMainCharacter::Temp()
 	}
 }
 
-void AMainCharacter::TestFire()
+void AMainCharacter::ActivateMuzzle()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Gun Fire!!!!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Gun Fire!!!!"));
     MuzzleFlash->Activate();
 }
 
@@ -176,7 +178,7 @@ void AMainCharacter::Tick(float DeltaTime)
 // Called to bind functionality to input
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Setup"));
+	//UE_LOG(LogTemp, Warning, TEXT("Setup"));
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);

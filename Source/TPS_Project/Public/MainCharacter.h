@@ -96,8 +96,8 @@ public:
 	void InitAnimation();
 
 	void Fire();
-	void Temp();
-	void TestFire();
+	void GunShotAnimation();
+	void ActivateMuzzle();
 private:
 	float Health;
 	int Ammo;
