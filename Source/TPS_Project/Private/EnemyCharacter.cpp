@@ -11,13 +11,36 @@ AEnemyCharacter::AEnemyCharacter()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	PrimaryActorTick.bCanEverTick = false;
 
+
+    LeftHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHitbox"));
+    RightHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("RightHitbox"));
+
+    LeftHitbox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("LeftHand"));
+    RightHitbox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("RightHand"));
+    LeftHitbox->SetSphereRadius(40.f);
+    RightHitbox->SetSphereRadius(40.f);
+
+    LeftHitbox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    RightHitbox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+}
+
+void AEnemyCharacter::SetLeftHitbox(ECollisionEnabled::Type CollisionEnabled)
+{
+    if (LeftHitbox) //널 체크
+        LeftHitbox->SetCollisionEnabled(CollisionEnabled);
+}
+
+void AEnemyCharacter::SetRightHitbox(ECollisionEnabled::Type CollisionEnabled)
+{
+    if (RightHitbox) //널 체크
+        RightHitbox->SetCollisionEnabled(CollisionEnabled);
 }
 
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

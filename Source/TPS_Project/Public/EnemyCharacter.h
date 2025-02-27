@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/SphereComponent.h"
 #include "EnemyCharacter.generated.h"
+
 
 UCLASS()
 class TPS_PROJECT_API AEnemyCharacter : public ACharacter
@@ -16,6 +18,18 @@ public:
 	AEnemyCharacter();
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
 	TArray<AActor*> PatrolPoints;
+
+    UPROPERTY(EditDefaultsOnly, Category = Hitbox)
+    USphereComponent *LeftHitbox;
+
+    UPROPERTY(EditDefaultsOnly, Category = Hitbox)
+    USphereComponent *RightHitbox;
+    UFUNCTION(BlueprintCallable)
+    void SetLeftHitbox(ECollisionEnabled::Type CollisionEnabled); 
+    UFUNCTION(BlueprintCallable)
+    void SetRightHitbox(ECollisionEnabled::Type CollisionEnabled);
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
