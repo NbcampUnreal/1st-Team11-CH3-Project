@@ -16,10 +16,12 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	FName LevelToLoad;		// ·ÎµåÇÒ ·¹º§ ÀÌ¸§
+	FName LevelToLoad;		// ë¡œë“œí•  ë ˆë²¨ ì´ë¦„
+
+    bool bIsLoaded;
 
 private:
-	// ¹Ú½º ÄÄÆ÷³ÍÆ®¿¡ overlap µÇ¸é º¸½º ·¹º§ÀÌ [½ºÆ®¸² ÀÎ] µÇµµ·Ï
+	// ë°•ìŠ¤ ì»´í¬ë„ŒíŠ¸ì— overlap ë˜ë©´ ë³´ìŠ¤ ë ˆë²¨ì´ [ìŠ¤íŠ¸ë¦¼ ì¸] ë˜ë„ë¡
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* OverlapVolume;
 

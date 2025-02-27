@@ -14,7 +14,7 @@ public:
 	AMainGameState();
 
 protected:
-    FString CurrentLevel;
+    FName CurrentLevel;
 	int32 WaveCount;
 	int32 MaxWaveCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Wave")
@@ -23,7 +23,7 @@ protected:
 	float DefenceTime;			// 버텨야할 시간
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Zombie Spawners")
-    TMap<FString, FActorArray> SpawnVolumesByLevel;
+    TMap<FName, FActorArray> SpawnVolumesByLevel;   // 각 레벨에 배치된 좀비 스폰 볼륨들
 
 	FTimerHandle LevelTimerHandle;
 	FTimerHandle WaveStartTimerHandle;
@@ -37,5 +37,6 @@ public:
 	void EndWave();
 	void DefenceLevelTimeUp();
 	void GameOver();
-    void SetCurrentLevel(FString LevelName);
+    void SetCurrentLevel(FName LevelName);
+    FName GetCurrentLevel() const;
 };

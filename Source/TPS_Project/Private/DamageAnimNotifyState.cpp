@@ -12,7 +12,7 @@ void UDamageAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnim
 
     if (MainCharacter)
     {
-        //MainCharacter->SetDamageState(true);
+        MainCharacter->SetDamageState(true);
     }
 }
 
@@ -24,6 +24,6 @@ void UDamageAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSe
 
     if (MainCharacter)
     {
-        //MainCharacter->SetDamageState(false);
+        MainCharacter->SetDamageState(false);
     }
 }

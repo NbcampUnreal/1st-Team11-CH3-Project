@@ -10,5 +10,5 @@ struct FActorArray
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Actors")
-    TArray<TSoftObjectPtr<AActor>> Actors;
+    TArray<TSoftObjectPtr<AActor>> SpawnVolumes;
 };

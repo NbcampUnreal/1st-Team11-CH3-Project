@@ -11,7 +11,7 @@ AZombieSpawnVolume::AZombieSpawnVolume()
 	SpawningBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawningBox"));
 	SpawningBox->SetupAttachment(Scene);
 
-	bIsSpawn = false;
+	bIsSpawn = true;
 	SpawnInterval = 2.0f;
 
 	ZombieDataTable = nullptr;
