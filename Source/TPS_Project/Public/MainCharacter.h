@@ -84,6 +84,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayDamageAnim();
 
+    virtual float TakeDamage(float DamageAmount,
+        struct FDamageEvent const &DamageEvent,
+        AController *EventInstigator,
+        AActor *DamageCauser) override;
+
 	float GetCharacterHealth() const;
 
 	void SetCharacterHealth(float Value);

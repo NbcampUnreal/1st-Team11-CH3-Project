@@ -120,12 +120,11 @@ void AMainCharacter::InitAnimation()
 {
 	if (FireMontage)
 	{
-		const auto NotifyEvents=FireMontage->Notifies;
+        const auto &NotifyEvents = FireMontage->Notifies;
 
-		for (auto Notify:NotifyEvents)
+        for (auto &Notify : NotifyEvents)
 		{
-            FName Name = Notify.GetNotifyEventName();
-            UE_LOG(LogTemp, Warning, TEXT("%s"), *Name.ToString());
+            
 		}
 	}
 }
@@ -139,6 +138,11 @@ void AMainCharacter::PlayDamageAnim()
 	{
 		AnimInstance->Montage_Play(HitMontage);
 	}
+}
+
+float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
+{
+    return 0.0f;
 }
 
 void AMainCharacter::Fire()
