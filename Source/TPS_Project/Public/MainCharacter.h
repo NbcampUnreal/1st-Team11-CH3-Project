@@ -48,6 +48,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     UAnimMontage* ReloadMontage;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Animation")
+    UAnimMontage* DeathMontage;
+
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
     bool bIsFire;
 
@@ -93,8 +96,10 @@ public:
     void GunShotAnimation();
     void ActivateMuzzle();
     void SetDamageState(bool HasDamage);
+    void GameOver();
 
 private:
     float Health;
     int Ammo;
+    bool bIsGameOver;
 };

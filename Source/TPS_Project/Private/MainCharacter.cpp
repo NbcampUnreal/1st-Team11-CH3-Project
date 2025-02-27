@@ -138,7 +138,7 @@ float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 void AMainCharacter::Fire()
 {
-    GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
+    GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.1f, true);
 }
 
 void AMainCharacter::GunShotAnimation()
@@ -148,7 +148,6 @@ void AMainCharacter::GunShotAnimation()
     if (AnimInstance && FireMontage)
     {
         AnimInstance->Montage_Play(FireMontage);
-
     }
 }
 
@@ -161,6 +160,16 @@ void AMainCharacter::ActivateMuzzle()
 void AMainCharacter::SetDamageState(bool HasDamage)
 {
     bHasDamage = HasDamage;
+}
+
+void AMainCharacter::GameOver()
+{
+    UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+    if (AnimInstance && DeathMontage)
+    {
+        AnimInstance->Montage_Play(DeathMontage);
+    }
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
