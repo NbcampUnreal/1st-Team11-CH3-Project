@@ -18,6 +18,7 @@ public class TPS_Project : ModuleRules
 			"UMG"
 		}
 	);
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

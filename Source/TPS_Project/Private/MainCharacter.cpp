@@ -16,6 +16,9 @@ AMainCharacter::AMainCharacter()
 	//FAttachmentTransformRules AttachmentRules ( EAttachmentRule::SnapToTarget , true );
 	StaticMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
 
+    MuzzleFlash = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
+    MuzzleFlash->SetupAttachment(StaticMesh);
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 300.0f;
@@ -31,7 +34,7 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+    InitAnimation();
 }
 
 void AMainCharacter::Move(const FInputActionValue& Value)
@@ -92,6 +95,17 @@ void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 	GetWorldTimerManager().ClearTimer(FireTimer);
 }
 
+void AMainCharacter::Reload(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Reload"));
+	UAnimInstance* AnimInstance=GetMesh()->GetAnimInstance();
+
+	if ( AnimInstance && ReloadMontage )
+	{
+		AnimInstance->Montage_Play(ReloadMontage);
+	}
+}
+
 float AMainCharacter::GetCharacterHealth() const
 {
 	return Health;
@@ -100,6 +114,19 @@ float AMainCharacter::GetCharacterHealth() const
 void AMainCharacter::SetCharacterHealth(float Value)
 {
 	Health += Value;
+}
+
+void AMainCharacter::InitAnimation()
+{
+	if (FireMontage)
+	{
+        const auto &NotifyEvents = FireMontage->Notifies;
+
+        for (auto &Notify : NotifyEvents)
+		{
+            
+		}
+	}
 }
 
 void AMainCharacter::PlayDamageAnim()
@@ -111,6 +138,11 @@ void AMainCharacter::PlayDamageAnim()
 	{
 		AnimInstance->Montage_Play(HitMontage);
 	}
+}
+
+float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser)
+{
+    return 0.0f;
 }
 
 void AMainCharacter::Fire()
@@ -126,6 +158,12 @@ void AMainCharacter::Temp()
 	{
 		AnimInstance->Montage_Play(FireMontage);
 	}
+}
+
+void AMainCharacter::TestFire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Gun Fire!!!!"));
+    MuzzleFlash->Activate();
 }
 
 // Called every frame
@@ -150,5 +188,6 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	EnhancedInput->BindAction(PlayerController->LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 	EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
 	EnhancedInput->BindAction(PlayerController->GunFireAction , ETriggerEvent::Completed , this , &AMainCharacter::StopGunFire);
+	EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacter::Reload);
 }
 

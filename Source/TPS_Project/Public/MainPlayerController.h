@@ -50,6 +50,8 @@ protected:
 	// MainMenu-> Game 시작
 	void StartGame();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Input")
+	UInputAction* ReloadAction;
 protected:
 	virtual void BeginPlay() override;
 };

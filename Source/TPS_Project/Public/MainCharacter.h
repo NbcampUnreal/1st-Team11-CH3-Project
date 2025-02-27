@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "MainCharacter.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -23,6 +26,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	UCameraComponent* Camera;
 
@@ -31,6 +36,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 	UStaticMeshComponent* StaticMesh;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    UNiagaraComponent* MuzzleFlash;
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
@@ -41,6 +49,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Animation")
 	UAnimMontage* HitMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category="Animation")
+	UAnimMontage* ReloadMontage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
 	bool IsFire;
@@ -67,16 +78,27 @@ public:
 	UFUNCTION ()
 	void StopGunFire (const FInputActionValue& Value);
 
-	float GetCharacterHealth() const;
-
-	void SetCharacterHealth(float Value);
-	
+	UFUNCTION()
+	void Reload(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
 	void PlayDamageAnim();
 
+    virtual float TakeDamage(float DamageAmount,
+        struct FDamageEvent const &DamageEvent,
+        AController *EventInstigator,
+        AActor *DamageCauser) override;
+
+	float GetCharacterHealth() const;
+
+	void SetCharacterHealth(float Value);
+	
+	void InitAnimation();
+
 	void Fire();
 	void Temp();
+	void TestFire();
 private:
 	float Health;
+	int Ammo;
 };

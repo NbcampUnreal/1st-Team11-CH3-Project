@@ -9,6 +9,7 @@
 
 AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), GunFireAction(nullptr)
 ,MainMenuWidgetClass(nullptr), MainMenuWidgetInstance(nullptr)
+AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), GunFireAction(nullptr), ReloadAction(nullptr)
 {
 }
 
