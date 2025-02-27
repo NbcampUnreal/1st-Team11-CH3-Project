@@ -43,19 +43,21 @@ void AMainGameState::StartWave()
         return;
     }
 
-    if (SpawnVolumesByLevel[CurrentLevel].Actors.Num() > 0)
-	{
-        for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumesByLevel[CurrentLevel].Actors)
-		{
-            // LoadSynchronous()는 액터를 로드하는 것
-            //AActor* SpawnVolume = SoftSpawnVolume.LoadSynchronous();
-            AActor* SpawnVolume = SoftSpawnVolume.Get();
-			if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
-			{
-                ZombieSpawnVolume->SpawnInterval = 1.0f;
-			}
-		}
-	}
+    GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("VolumesByLevel : %d"), SpawnVolumesByLevel.Num()));
+
+ //   if (SpawnVolumesByLevel[CurrentLevel].Actors.Num() > 0)
+	//{
+ //       for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumesByLevel[CurrentLevel].Actors)
+	//	{
+ //           // LoadSynchronous()는 액터를 로드하는 것
+ //           //AActor* SpawnVolume = SoftSpawnVolume.LoadSynchronous();
+ //           AActor* SpawnVolume = SoftSpawnVolume.Get();
+	//		if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
+	//		{
+ //               ZombieSpawnVolume->SpawnInterval = 1.0f;
+	//		}
+	//	}
+	//}
 
 	WaveCount++;
 
@@ -71,32 +73,32 @@ void AMainGameState::EndWave()
 		return;
 	}
 
-    if (SpawnVolumesByLevel[CurrentLevel].Actors.Num() > 0)
-    {
-        for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumesByLevel[CurrentLevel].Actors)
-        {
-            AActor* SpawnVolume = SoftSpawnVolume.Get();
-            if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
-            {
-                ZombieSpawnVolume->SpawnInterval = 2.0f;
-            }
-        }
-    }
+    //if (SpawnVolumesByLevel[CurrentLevel].Actors.Num() > 0)
+    //{
+    //    for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumesByLevel[CurrentLevel].Actors)
+    //    {
+    //        AActor* SpawnVolume = SoftSpawnVolume.Get();
+    //        if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
+    //        {
+    //            ZombieSpawnVolume->SpawnInterval = 2.0f;
+    //        }
+    //    }
+    //}
 }
 
 void AMainGameState::DefenceLevelTimeUp()
 {
-	if (DefenceLevelSpawnVolumes.Num() > 0)
-	{
-		for (AActor* SpawnVolume : DefenceLevelSpawnVolumes)
-		{
-			if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
-			{
-				// 제한 시간 끝나면 스폰 안되도록
-                ZombieSpawnVolume->bIsSpawn = false;
-			}
-		}
-	}
+	//if (DefenceLevelSpawnVolumes.Num() > 0)
+	//{
+	//	for (AActor* SpawnVolume : DefenceLevelSpawnVolumes)
+	//	{
+	//		if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
+	//		{
+	//			// 제한 시간 끝나면 스폰 안되도록
+ //               ZombieSpawnVolume->bIsSpawn = false;
+	//		}
+	//	}
+	//}
 }
 
 void AMainGameState::GameOver()
