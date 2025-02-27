@@ -7,11 +7,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/TextBlock.h"
 
-AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), GunFireAction(nullptr)
-,MainMenuWidgetClass(nullptr), MainMenuWidgetInstance(nullptr)
-AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), GunFireAction(nullptr), ReloadAction(nullptr)
+AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), MainMenuWidgetClass(nullptr), MainMenuWidgetInstance(nullptr), GunFireAction(nullptr), ReloadAction(nullptr)
 {
+
 }
+
 
 
 void AMainPlayerController::BeginPlay()
@@ -87,5 +87,6 @@ void AMainPlayerController::StartGame()
 	bShowMouseCursor=false;
 	SetInputMode(FInputModeGameOnly());
 
+    // GameState에서 UI들 켜주기 (맵 바뀐상태)에서
 }
 

@@ -34,14 +34,21 @@ public:
 	UInputAction* GunFireAction;
 
 public:
-	//// 메인 메뉴 UI
+	// 메인 메뉴 UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Menu");
 	TSubclassOf<UUserWidget> MainMenuWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Menu")
 	UUserWidget* MainMenuWidgetInstance;
 
-//
-protected:
+    // 미션 UI
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Mission")
+    TSubclassOf<UUserWidget> MissionWidgetClass;
+
+    
+
+
+
+public:
 	// 메인메뉴 보여주기
 	UFUNCTION(BlueprintCallable, Category="Menu")
 	void ShowMainMenu(bool bIsRestart);

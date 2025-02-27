@@ -1,6 +1,11 @@
 #include "MainGameState.h"
 #include "ZombieSpawnVolume.h"
 #include "Kismet/GameplayStatics.h"
+#include "MainPlayerController.h"
+#include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Animation/WidgetAnimation.h"
+
 
 AMainGameState::AMainGameState()
 {
@@ -28,6 +33,45 @@ void AMainGameState::StartGame()
 	// TODO; HUD 보이게 하는 코드..
 	//...
 
+    // 미션 UI 
+    APlayerController *PC = UGameplayStatics::GetPlayerController(this, 0);
+    if (!PC)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("StartGame: PlayerController를 찾을 수 없습니다!"));
+        return;
+    }
+    // MainPlayerController로 캐스팅
+    AMainPlayerController *MainPC = Cast<AMainPlayerController>(PC);
+    if (!MainPC)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("StartGame: MainPlayerController 캐스팅 실패!"));
+        return;
+    }
+    // 위젯 클래스를 확인
+    if (!MainPC->MissionWidgetClass)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("StartGame: MissionWidgetClass가 설정되지 않았습니다!"));
+        return;
+    }
+    // Mission UI 생성
+    UUserWidget *MissionWidget = CreateWidget<UUserWidget>(MainPC, MainPC->MissionWidgetClass);
+    if (!MissionWidget)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("StartGame: MissionWidget 생성 실패!"));
+        return;
+    }
+    // 위젯을 화면에 추가
+    MissionWidget->AddToViewport();
+    UE_LOG(LogTemp, Log, TEXT("StartGame: Mission UI 생성 완료!"));
+
+
+    // 애니메이션 효과 추가
+    UFunction *PlayAnimFunc = MissionWidget->FindFunction(FName("PlayMissionAnim"));
+    if (PlayAnimFunc)
+    {
+        MissionWidget->ProcessEvent(PlayAnimFunc, nullptr);
+
+    }
 
 }
 
