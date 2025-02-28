@@ -77,3 +77,4 @@ private:
 };
 
 typedef TSharedRef<class FGitSourceControlChangelist, ESPMode::ThreadSafe> FGitSourceControlChangelistRef;
+
