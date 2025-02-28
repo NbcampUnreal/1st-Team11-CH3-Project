@@ -17,6 +17,8 @@ ATargetLightMachine::ATargetLightMachine()
 
 	MaxHealth = 5000.0f;
 	Health = MaxHealth;
+
+    Tags.Add(TEXT("Target"));
 }
 
 float ATargetLightMachine::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
