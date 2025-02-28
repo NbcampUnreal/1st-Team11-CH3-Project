@@ -75,3 +75,7 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+#Map Ignore
+/Content/Blueprints/BP_MainCharacter.uasset
+/Content/Maps/TestMap.umap
