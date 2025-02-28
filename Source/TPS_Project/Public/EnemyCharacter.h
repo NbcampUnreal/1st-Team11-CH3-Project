@@ -29,11 +29,17 @@ public:
     UFUNCTION(BlueprintCallable)
     void SetRightHitbox(ECollisionEnabled::Type CollisionEnabled);
 
+    const FName GetZombieType() const
+    {
+        return ZombieType;
+    }
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+    FName ZombieType = "CommonZombie";
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
