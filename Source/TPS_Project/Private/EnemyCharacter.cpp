@@ -15,8 +15,8 @@ AEnemyCharacter::AEnemyCharacter()
     LeftHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHitbox"));
     RightHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("RightHitbox"));
 
-    LeftHitbox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("LeftHand"));
-    RightHitbox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("RightHand"));
+    LeftHitbox->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("LeftHand"));
+    RightHitbox->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("RightHand"));
     LeftHitbox->SetSphereRadius(40.f);
     RightHitbox->SetSphereRadius(40.f);
 
