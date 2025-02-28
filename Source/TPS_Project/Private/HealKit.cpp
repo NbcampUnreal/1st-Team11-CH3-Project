@@ -6,7 +6,7 @@ AHealKit::AHealKit()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ItemType = "HealKit";
-	Heal = 40;
+	Heal = 40.0f;
 	RotationSpeed = 90.0f;
 
 	MedBagPatch = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MedBagPatch"));
@@ -32,8 +32,7 @@ void AHealKit::ActivateItem(AActor* Activator)
 	{
 		if (AMainCharacter* Player = Cast<AMainCharacter>(Activator))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, FString::Printf(TEXT("Heal !!!")));
-			//Player->Heal(Heal);
+			Player->SetCharacterHealth(Heal);
 		}
 
 		DestroyItem();
