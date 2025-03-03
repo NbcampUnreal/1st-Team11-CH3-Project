@@ -41,7 +41,7 @@ void AMainWeapon::Fire()
     {
         UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, WeaponMesh, TEXT("MuzzleSocket"));
     }
-
+    /*
     FVector Start = WeaponMesh->GetComponentLocation();
     FVector ForwardVector = WeaponMesh->GetForwardVector();
     FVector End = Start + (ForwardVector * 5000.0f);
@@ -51,6 +51,7 @@ void AMainWeapon::Fire()
         DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.0f, 0, 2.0f);
 
     }
+    */
 }
 
 void AMainWeapon::LineTraceShoot()
