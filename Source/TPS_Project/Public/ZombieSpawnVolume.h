@@ -16,7 +16,7 @@ public:
 	AZombieSpawnVolume();
 
 public:
-	bool bIsSpawn;			// Á¦ÇÑ ½Ã°£ ¹öÆ¼¸é ½ºÆù ¾ÈµÇµµ·Ï ÇÏ±â À§ÇØ
+	bool bIsSpawn;			// ì œí•œ ì‹œê°„ ë²„í‹°ë©´ ìŠ¤í° ì•ˆë˜ë„ë¡ í•˜ê¸° ìœ„í•´
 	float SpawnInterval;
 
 protected:
