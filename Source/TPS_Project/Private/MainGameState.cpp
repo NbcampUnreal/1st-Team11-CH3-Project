@@ -27,11 +27,11 @@ void AMainGameState::BeginPlay()
 
 void AMainGameState::StartGame()
 {
-	// Wave 타이머
-	GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
+	//// Wave 타이머
+	//GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
 
-	// Defence 타이머
-	GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::LevelTimeUp, DefenceTime, false);
+	//// Defence 타이머
+	//GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::LevelTimeUp, DefenceTime, false);
 
 	// TODO; HUD 보이게 하는 코드..
 	//...
