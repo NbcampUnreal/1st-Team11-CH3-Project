@@ -68,6 +68,28 @@ void AMainWeapon::PerformLineTrace()
     }
 }
 
+void AMainWeapon::ActivateMuzzle()
+{
+    if (MuzzleEffect)
+    {
+        UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, WeaponMesh, TEXT("MuzzleSocket"));
+    }
+
+    if (FireSound)
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+    }
+}
+
+void AMainWeapon::StartFire()
+{
+    Fire();
+}
+
+void AMainWeapon::StopFire()
+{
+}
+
 void AMainWeapon::Reload()
 {
     if (AmmoCount < MaxAmmo)

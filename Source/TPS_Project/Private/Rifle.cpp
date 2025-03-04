@@ -35,3 +35,8 @@ void ARifle::StopFire()
 {
     GetWorld()->GetTimerManager().ClearTimer(FireTimer);
 }
+
+void ARifle::Reload()
+{
+    Super::Reload();
+}

@@ -12,7 +12,10 @@ class TPS_PROJECT_API AMainWeapon : public AActor
 public:
     AMainWeapon();
     virtual void Fire();
-    void Reload();
+    virtual void Reload();
+    virtual void StartFire();
+    virtual void StopFire();
+    void ActivateMuzzle();
 
 protected:
     virtual void BeginPlay() override;
@@ -41,6 +44,12 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Appearance")
     UMaterialInterface* WeaponMaterial;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Effects")
+    UParticleSystem* MuzzleEffect;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Effects")
+    USoundBase* FireSound;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Debug", meta = (AllowPrivateAccess = "true"))
     bool bDebugLine = true;
