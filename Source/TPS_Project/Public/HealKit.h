@@ -14,7 +14,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Item")
-	int32 Heal;
+	float Heal;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotation")
 	float RotationSpeed;
 
