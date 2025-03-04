@@ -10,6 +10,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class AMainWeapon;
 struct FInputActionValue;
 
 UCLASS()
@@ -29,11 +30,17 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
     USpringArmComponent* SpringArm;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-    UStaticMeshComponent* StaticMesh;
+    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+    //UStaticMeshComponent* StaticMesh;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
-    UNiagaraComponent* MuzzleFlash;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+    AMainWeapon* MainWeapon;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+    TSubclassOf<AMainWeapon> TestWeapon;
+
+    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    //UNiagaraComponent* MuzzleFlash;
 
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
@@ -76,9 +83,10 @@ public:
     void GunFire(const FInputActionValue& Value);
     UFUNCTION()
     void StopGunFire(const FInputActionValue& Value);
-
     UFUNCTION()
     void Reload(const FInputActionValue& Value);
+    UFUNCTION()
+    void TestEquipWeapon();
 
     UFUNCTION(BlueprintCallable)
     void PlayDamageAnim();
