@@ -18,7 +18,11 @@ void ASniper::Fire()
     {
         Super::Fire();
         AmmoCount--;
-        SetFOV(ZoomedFOV);
+        if (bIsZoomed)
+        {
+            SetFOV(ZoomedFOV);
+        }
+
         UE_LOG(LogTemp, Warning, TEXT("탄약 : %d"), AmmoCount);
     }
     else
@@ -33,5 +37,29 @@ void ASniper::SetFOV(float NewFOV)
     if (PlayerController && PlayerController->PlayerCameraManager)
     {
         PlayerController->PlayerCameraManager->SetFOV(NewFOV);
+    }
+}
+
+void ASniper::ZoomIn()
+{
+    SetFOV(ZoomedFOV);
+    bIsZoomed = true;
+}
+
+void ASniper::ZoomOut()
+{
+    SetFOV(DefaultFOV);
+    bIsZoomed = false;
+}
+
+void ASniper::ToglleZoom()
+{
+    if (bIsZoomed)
+    {
+        ZoomOut();
+    }
+    else
+    {
+        ZoomIn();
     }
 }

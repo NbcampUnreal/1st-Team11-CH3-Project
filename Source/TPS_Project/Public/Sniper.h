@@ -18,10 +18,15 @@ protected:
 
 private:
     void SetFOV(float NuwFOV);
+    void ZoomIn();
+    void ZoomOut();
+    void ToglleZoom();
 
     UPROPERTY(EditDefaultsOnly, Category="Sniper Settings")
     float ZoomedFOV = 30.0f;
 
     UPROPERTY(EditDefaultsOnly, Category="Sniper Settings")
     float DefaultFOV = 90.0f;
+
+    bool bIsZoomed = false;
 };
