@@ -186,7 +186,17 @@ void AMainPlayerController::StartGame()
 	// 게임인스턴스 있으면 데이터 리셋
 
 	UGameplayStatics::OpenLevel(GetWorld(), FName("DefenceLevel"));
-	
+
+
+    //AMainGameState* MainGameState = GetWorld()->GetGameState<AMainGameState>();
+    //if (MainGameState)
+    //{
+    //    //MainGameState->SetCurrentLevel("DefenceLevel");
+    //    MainGameState->StartGame();
+    //}
+    //
+
+
 	
 	// todo; 임시방편으로,.. 원래 HUD 안에서 해야함
 	bShowMouseCursor=false;

@@ -6,6 +6,9 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Animation/WidgetAnimation.h"
 #include "Components/TextBlock.h"
+#include "Components/ProgressBar.h"
+#include "MainCharacter.h"
+
 
 AMainGameState::AMainGameState()
 {
@@ -18,11 +21,15 @@ AMainGameState::AMainGameState()
 
 void AMainGameState::BeginPlay()
 {
+    //TODO; 뭔가 있겠지..
 	Super::BeginPlay();
-
-    CurrentLevel = "DefenceLevel";
-
-    StartGame();
+    FString CurrentLevelName = GetWorld()->GetMapName();
+    if (CurrentLevelName.Contains("DefenceLevel"))
+    {
+        CurrentLevel = "DefenceLevel";
+        StartGame();
+    }
+    
 }
 
 void AMainGameState::StartGame()
@@ -201,7 +208,15 @@ void AMainGameState::UpdateHUD()
             if (UTextBlock* TimeText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("Time"))))
             {
                 // 게임스테이트에서 설정해둔 레벨 타이머 핸들, TODO; 일단은 레벨타이머만...;
+               
+               
                 float RemainingTime = GetWorldTimerManager().GetTimerRemaining(LevelTimerHandle);
+
+                // 만약 0보다 작아진다면 0이되도록해라
+              
+                RemainingTime = FMath::Clamp(RemainingTime, 0.0f, DefenceTime);
+                
+
                 // UI에 어떻게 보여질건지 FString형식에서 -> FText 형식으로 변환해서 UI에 설정
                 TimeText->SetText(FText::FromString(FString::Printf(TEXT("Time: %.1f"), RemainingTime))); 
             }
@@ -209,6 +224,31 @@ void AMainGameState::UpdateHUD()
             // TODO; 다양한 HUD 업데이트 코드 
             
             // 캐릭터 체력UI 업데이트 HealthBar
+           if(UProgressBar* HPBar = Cast<UProgressBar>(HUDWidget->GetWidgetFromName(TEXT("HealthBar"))))
+           {
+               // Health / MaxHealth 
+               float HPPercent = 0.f;
+               if (100.f/*MaxHealth*/ > 0.f)
+               {
+                   ACharacter * PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+                   AMainCharacter* MainPlayerCharacter = Cast<AMainCharacter>(PlayerCharacter);
+                   HPPercent = MainPlayerCharacter->GetCharacterHealth() / 100.f;
+               }
+               HPBar->SetPercent(HPPercent);
+               
+               // HPPercent가 낮으면 빨갛게 
+               if (HPPercent < 0.3f)
+               {
+                   FLinearColor LowHPColor = FLinearColor::Red;
+                   HPBar->SetFillColorAndOpacity(LowHPColor);
+               }
+               else
+               {
+                   FLinearColor LowHPColor = FLinearColor::Green;
+                   HPBar->SetFillColorAndOpacity(LowHPColor);
+               }
+           }
+            
             // UpdateHealthBar(); 
 
             // 점수?
