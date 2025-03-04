@@ -1,6 +1,14 @@
 #include "MainGameState.h"
 #include "ZombieSpawnVolume.h"
 #include "Kismet/GameplayStatics.h"
+#include "MainPlayerController.h"
+#include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Animation/WidgetAnimation.h"
+#include "Components/TextBlock.h"
+#include "Components/ProgressBar.h"
+#include "MainCharacter.h"
+
 
 AMainGameState::AMainGameState()
 {
@@ -13,16 +21,50 @@ AMainGameState::AMainGameState()
 
 void AMainGameState::BeginPlay()
 {
+    //TODO; 뭔가 있겠지..
 	Super::BeginPlay();
-
-    CurrentLevel = "DefenceLevel";
-
-    StartGame();
+    FString CurrentLevelName = GetWorld()->GetMapName();
+    if (CurrentLevelName.Contains("DefenceLevel"))
+    {
+        CurrentLevel = "DefenceLevel";
+        StartGame();
+    }
+    
 }
 
 void AMainGameState::StartGame()
 {
+	//// Wave 타이머
+	//GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
+
+	//// Defence 타이머
+	//GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::LevelTimeUp, DefenceTime, false);
+
+	// TODO; HUD 보이게 하는 코드..-> 실제 DefenceLevel일때 
+    // FString CurrentLevelName = GetWorld()->GetMapName();
+    //if (CurrentLevelName.Contains("DefenceLevel")) // 실제 언리얼에디터에서 설정한 레벨이름과 확인후..
+	//...
+
+
+
+   
     WaveCount = 0;
+
+    // startWave로 안가는데?;';
+
+    // ;타이머 HUD와 연동..
+    FString CurrentLevelName = GetWorld()->GetMapName();
+    if (CurrentLevelName.Contains("DefenceLevel")) // 실제 언리얼에디터에서 설정한 레벨이름과 확인후..
+    {
+        // Wave 타이머 -> UpdateHUD로 변경; 매 시간? 마다 UpdateHUD해주기 
+        GetWorldTimerManager().SetTimer(
+            HUDUpdateTimerHandle,
+            this,
+            &AMainGameState::UpdateHUD,
+            0.1f,//0.1초마다
+            true
+        );
+    }
 
     GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Start Game : %s"), *CurrentLevel.ToString()));
 
@@ -50,6 +92,21 @@ void AMainGameState::StartGame()
 // 스폰 주기 감소 -> 마리 수 증가
 void AMainGameState::StartWave()
 {
+    //FString CurrentLevelName = GetWorld()->GetMapName();
+    //if (CurrentLevelName.Contains("DefenceLevel")) // 실제 언리얼에디터에서 설정한 레벨이름과 확인후..
+    //{
+    //    // Wave 타이머 -> UpdateHUD로 변경; 매 시간? 마다 UpdateHUD해주기 
+    //    GetWorldTimerManager().SetTimer(
+    //        HUDUpdateTimerHandle,
+    //        this,
+    //        &AMainGameState::UpdateHUD,
+    //        0.1f,//0.1초마다
+    //        true
+    //        );
+    //}
+
+
+
     if (WaveCount >= MaxWaveCount)
     {
         GetWorld()->GetTimerManager().ClearTimer(WaveStartTimerHandle);
@@ -121,11 +178,94 @@ void AMainGameState::DefenceLevelTimeUp()
 void AMainGameState::GameOver()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Game Over!")));
+
+	// todo; 게임오버시 메인메뉴보이게? ...
+
 }
 
 void AMainGameState::SetCurrentLevel(FName Level)
 {
     CurrentLevel = Level;
+}
+
+void AMainGameState::UpdateHUD()
+{
+
+
+
+    if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+    {
+        // 다운캐스팅해서 컨트롤러 받아오기
+        AMainPlayerController* MainPlayerController = Cast<AMainPlayerController>(PlayerController);
+
+
+
+
+        // 인스턴스 얻어오기 + 얻어왔다면..
+        if (UUserWidget* HUDWidget = MainPlayerController->GetHUDWidget())
+        {
+            // 시간 UI 업데이트
+            if (UTextBlock* TimeText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("Time"))))
+            {
+                // 게임스테이트에서 설정해둔 레벨 타이머 핸들, TODO; 일단은 레벨타이머만...;
+               
+               
+                float RemainingTime = GetWorldTimerManager().GetTimerRemaining(LevelTimerHandle);
+
+                // 만약 0보다 작아진다면 0이되도록해라
+              
+                RemainingTime = FMath::Clamp(RemainingTime, 0.0f, DefenceTime);
+                
+
+                // UI에 어떻게 보여질건지 FString형식에서 -> FText 형식으로 변환해서 UI에 설정
+                TimeText->SetText(FText::FromString(FString::Printf(TEXT("Time: %.1f"), RemainingTime))); 
+            }
+
+            // TODO; 다양한 HUD 업데이트 코드 
+            
+            // 캐릭터 체력UI 업데이트 HealthBar
+           if(UProgressBar* HPBar = Cast<UProgressBar>(HUDWidget->GetWidgetFromName(TEXT("HealthBar"))))
+           {
+               // Health / MaxHealth 
+               float HPPercent = 0.f;
+               if (100.f/*MaxHealth*/ > 0.f)
+               {
+                   ACharacter * PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+                   AMainCharacter* MainPlayerCharacter = Cast<AMainCharacter>(PlayerCharacter);
+                   HPPercent = MainPlayerCharacter->GetCharacterHealth() / 100.f;
+               }
+               HPBar->SetPercent(HPPercent);
+               
+               // HPPercent가 낮으면 빨갛게 
+               if (HPPercent < 0.3f)
+               {
+                   FLinearColor LowHPColor = FLinearColor::Red;
+                   HPBar->SetFillColorAndOpacity(LowHPColor);
+               }
+               else
+               {
+                   FLinearColor LowHPColor = FLinearColor::Green;
+                   HPBar->SetFillColorAndOpacity(LowHPColor);
+               }
+           }
+            
+            // UpdateHealthBar(); 
+
+            // 점수?
+
+            // Wave 
+            if (UTextBlock* WaveIndexText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("Wave"))))
+            {
+                WaveIndexText->SetText(FText::FromString(FString::Printf(TEXT("Wave: %d"), WaveCount+1/*0으로시작해서..*/)));
+            }
+
+
+        }
+
+    }
+    
+
+
 }
 
 FName AMainGameState::GetCurrentLevel() const
