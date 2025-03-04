@@ -4,11 +4,11 @@
 
 AMainGameState::AMainGameState()
 {
+    CurrentLevel = "";
 	WaveCount = 0;
 	MaxWaveCount = 5;
 	WaveInterval = 10.0f;
 	DefenceTime = 60.0f;
-    CurrentLevel = "";
 }
 
 void AMainGameState::BeginPlay()
@@ -17,19 +17,32 @@ void AMainGameState::BeginPlay()
 
     CurrentLevel = "DefenceLevel";
 
-	StartGame();
+    StartGame();
 }
 
 void AMainGameState::StartGame()
 {
     WaveCount = 0;
 
-    if (CurrentLevel == "DefenceLevel")
+    GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Start Game : %s"), *CurrentLevel.ToString()));
+
+    if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find(CurrentLevel))
     {
-        // Defence Level의 Defence 타이머
-        GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::DefenceLevelTimeUp, DefenceTime, false);
+        for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumes->SpawnVolumes)
+        {
+            if (AActor* SpawnVolume = SoftSpawnVolume.Get())
+            {
+                if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
+                {
+                    ZombieSpawnVolume->bIsSpawn = true;
+                }
+            }
+        }
     }
 
+    // Defence 타이머
+    GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::DefenceLevelTimeUp, DefenceTime, false);
+  
     // Wave 타이머
     GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 5.0f);
 }
@@ -88,7 +101,9 @@ void AMainGameState::EndWave()
 
 void AMainGameState::DefenceLevelTimeUp()
 {
-    if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find("DefenceLevel"))
+    UE_LOG(LogTemp, Warning, TEXT("Time Up"));
+
+    if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find(CurrentLevel))
     {
         for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumes->SpawnVolumes)
         {
@@ -108,9 +123,9 @@ void AMainGameState::GameOver()
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Game Over!")));
 }
 
-void AMainGameState::SetCurrentLevel(FName LevelName)
+void AMainGameState::SetCurrentLevel(FName Level)
 {
-    CurrentLevel = LevelName;
+    CurrentLevel = Level;
 }
 
 FName AMainGameState::GetCurrentLevel() const
