@@ -6,8 +6,19 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/TextBlock.h"
+#include "MainGameState.h"
 
-AMainPlayerController::AMainPlayerController() : InputMappingContext(nullptr), MoveAction(nullptr), JumpAction(nullptr), LookAction(nullptr), MainMenuWidgetClass(nullptr), MainMenuWidgetInstance(nullptr), GunFireAction(nullptr), ReloadAction(nullptr)
+AMainPlayerController::AMainPlayerController() : 
+    InputMappingContext(nullptr), 
+    MoveAction(nullptr), 
+    JumpAction(nullptr), 
+    LookAction(nullptr), 
+    MainMenuWidgetClass(nullptr), 
+    MainMenuWidgetInstance(nullptr), 
+    HUDWidgetClass(nullptr), 
+    HUDWidgetInstance(nullptr), 
+    GunFireAction(nullptr), 
+    ReloadAction(nullptr)
 {
 
 }
@@ -29,6 +40,58 @@ void AMainPlayerController::BeginPlay()
 	{
 		ShowMainMenu(false); // false 는 처음 시작 나타냄 
 	}
+
+
+
+    // 디펜스레벨로 바뀌었다면..
+    FString CurrentLevelName = GetWorld()->GetMapName();
+    if (CurrentLevelName.Contains("DefenceLevel")) // 실제 언리얼에디터에서 설정한 레벨이름과 확인후..
+    {
+
+        ShowGameHud();
+
+
+        // 미션 UI 생성 로직
+         // 미션 UI 
+        APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+        if (!PC)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("StartGame: PlayerController를 찾을 수 없습니다!"));
+            return;
+        }
+        // MainPlayerController로 캐스팅
+        AMainPlayerController* MainPC = Cast<AMainPlayerController>(PC);
+        if (!MainPC)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("StartGame: MainPlayerController 캐스팅 실패!"));
+            return;
+        }
+        // 위젯 클래스를 확인
+        if (!MainPC->MissionWidgetClass)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("StartGame: MissionWidgetClass가 설정되지 않았습니다!"));
+            return;
+        }
+        // Mission UI 생성
+        UUserWidget* MissionWidget = CreateWidget<UUserWidget>(MainPC, MainPC->MissionWidgetClass);
+        if (!MissionWidget)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("StartGame: MissionWidget 생성 실패!"));
+            return;
+        }
+        // 위젯을 화면에 추가
+        MissionWidget->AddToViewport();
+        UE_LOG(LogTemp, Log, TEXT("StartGame: Mission UI 생성 완료!"));
+
+
+        // 애니메이션 효과 추가
+        UFunction* PlayAnimFunc = MissionWidget->FindFunction(FName("PlayMissionAnim"));
+        if (PlayAnimFunc)
+        {
+            MissionWidget->ProcessEvent(PlayAnimFunc, nullptr);
+        }
+
+    }
 }
 
 //
@@ -74,6 +137,48 @@ void AMainPlayerController::ShowMainMenu(bool bIsRestart)
 
 
 
+}
+
+void AMainPlayerController::ShowGameHud()
+{
+    // 이미 존재했다면 지우고 시작
+    if (HUDWidgetInstance)
+    {
+        HUDWidgetInstance->RemoveFromParent();
+        HUDWidgetInstance = nullptr;
+    }
+
+    // 이미 메뉴가 떠 있다면 혹시 모르니 지우기
+    if (MainMenuWidgetInstance)
+    {
+        MainMenuWidgetInstance->RemoveFromParent();
+        MainMenuWidgetInstance = nullptr;
+    }
+
+    if (HUDWidgetClass)
+    {
+        HUDWidgetInstance = CreateWidget<UUserWidget>(this, HUDWidgetClass);
+        if (HUDWidgetInstance)
+        {
+            HUDWidgetInstance->AddToViewport();
+            bShowMouseCursor = false;
+            SetInputMode(FInputModeGameOnly());
+
+            // GetWorld() 가 존재한다면... 게임스테이트에서 얻어오기 
+            AMainGameState* MainGameState =
+                GetWorld() ? GetWorld()->GetGameState<AMainGameState>() : nullptr;
+            if (MainGameState)
+            {
+                MainGameState->UpdateHUD();
+            }
+
+        }
+    }
+}
+
+UUserWidget* AMainPlayerController::GetHUDWidget() const
+{
+    return HUDWidgetInstance;
 }
 
 void AMainPlayerController::StartGame()
