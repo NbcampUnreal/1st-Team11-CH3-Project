@@ -17,7 +17,7 @@ protected:
     FName CurrentLevel;
 	int32 WaveCount;
 	int32 MaxWaveCount;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Wave")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Wave")
 	float WaveInterval;			// Wave 간격
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameState|Level")
 	float DefenceTime;			// 버텨야할 시간
@@ -37,6 +37,6 @@ public:
 	void EndWave();
 	void DefenceLevelTimeUp();
 	void GameOver();
-    void SetCurrentLevel(FName LevelName);
+    void SetCurrentLevel(FName Level);
     FName GetCurrentLevel() const;
 };

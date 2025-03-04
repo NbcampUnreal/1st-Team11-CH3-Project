@@ -39,7 +39,6 @@ void ALevelStreamer::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
         if (AMainGameState* MainGameState = GetWorld()->GetGameState<AMainGameState>())
         {
             MainGameState->SetCurrentLevel(LevelToLoad);
-            MainGameState->StartGame();
         }
     }
 }
