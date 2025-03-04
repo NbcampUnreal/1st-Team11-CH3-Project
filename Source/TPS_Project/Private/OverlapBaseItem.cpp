@@ -12,7 +12,7 @@ AOverlapBaseItem::AOverlapBaseItem()
 	BoxCollision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	BoxCollision->SetupAttachment(Scene);
 
-	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MedBag"));
+	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComp"));
 	StaticMeshComp->SetupAttachment(Scene);
 
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AOverlapBaseItem::OnItemBeginOverlap);

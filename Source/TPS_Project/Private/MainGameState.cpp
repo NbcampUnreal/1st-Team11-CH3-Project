@@ -9,11 +9,11 @@
 
 AMainGameState::AMainGameState()
 {
+    CurrentLevel = "";
 	WaveCount = 0;
 	MaxWaveCount = 5;
 	WaveInterval = 10.0f;
 	DefenceTime = 60.0f;
-    CurrentLevel = "";
 }
 
 void AMainGameState::BeginPlay()
@@ -22,7 +22,7 @@ void AMainGameState::BeginPlay()
 
     CurrentLevel = "DefenceLevel";
 
-	StartGame();
+    StartGame();
 }
 
 void AMainGameState::StartGame()
@@ -43,15 +43,6 @@ void AMainGameState::StartGame()
    
     WaveCount = 0;
 
-    if (CurrentLevel == "DefenceLevel") // 이건 게임스테이트라서 메인메뉴레벨에서도 그냥 defence레벨로 인식됨..; BeginPlay에서 이름을..
-    {
-        // Defence Level의 Defence 타이머
-        GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::DefenceLevelTimeUp, DefenceTime, false);
-        
-        // Wave 타이머
-        GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 10.0f);
-    }
-
     // startWave로 안가는데?;';
 
     // ;타이머 HUD와 연동..
@@ -68,6 +59,27 @@ void AMainGameState::StartGame()
         );
     }
 
+    GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Start Game : %s"), *CurrentLevel.ToString()));
+
+    if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find(CurrentLevel))
+    {
+        for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumes->SpawnVolumes)
+        {
+            if (AActor* SpawnVolume = SoftSpawnVolume.Get())
+            {
+                if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
+                {
+                    ZombieSpawnVolume->bIsSpawn = true;
+                }
+            }
+        }
+    }
+
+    // Defence 타이머
+    GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::DefenceLevelTimeUp, DefenceTime, false);
+  
+    // Wave 타이머
+    GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 5.0f);
 }
 
 // 스폰 주기 감소 -> 마리 수 증가
@@ -139,7 +151,9 @@ void AMainGameState::EndWave()
 
 void AMainGameState::DefenceLevelTimeUp()
 {
-    if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find("DefenceLevel"))
+    UE_LOG(LogTemp, Warning, TEXT("Time Up"));
+
+    if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find(CurrentLevel))
     {
         for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumes->SpawnVolumes)
         {
@@ -162,10 +176,9 @@ void AMainGameState::GameOver()
 
 }
 
-
-void AMainGameState::SetCurrentLevel(FName LevelName)
+void AMainGameState::SetCurrentLevel(FName Level)
 {
-    CurrentLevel = LevelName;
+    CurrentLevel = Level;
 }
 
 void AMainGameState::UpdateHUD()

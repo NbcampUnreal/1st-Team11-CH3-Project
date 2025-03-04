@@ -10,7 +10,7 @@ struct FZombieSpawnRow : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName ItemType;
+	FName ZombieType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> ZombieClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
