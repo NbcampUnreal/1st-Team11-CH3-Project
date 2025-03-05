@@ -32,11 +32,27 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Target|Health")
 	float MaxHealth;
 	float Health;
+
+
+    FTimerHandle HUDUpdateTimerHandle;
+
 	
 protected:
+    virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	void OnTargetDestroy();
     void UpdateOverheadHP();
 
 };
+
+
+/** ================= 1. UPROPERTY (리플렉션 시스템 변수) ================= **/
+
+/** ================= 2. UFUNCTION (리플렉션 시스템 함수) ================= **/
+
+/** ================= 3. 생성자 및 필수 오버라이드 함수 ================= **/
+
+/** ================= 4. 일반 메서드 (리플렉션이 필요 없는 함수) ================= **/
+
+/** ================= 5. 일반 멤버 변수 (리플렉션이 필요 없는 변수) ================= **/

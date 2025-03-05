@@ -29,6 +29,20 @@ ATargetLightMachine::ATargetLightMachine()
     Tags.Add(TEXT("Target"));
 }
 
+void ATargetLightMachine::BeginPlay()
+{
+    Super::BeginPlay();
+    
+    // Wave 타이머 -> UpdateHUD로 변경; 매 시간? 마다 UpdateHUD해주기 
+    GetWorldTimerManager().SetTimer(
+        HUDUpdateTimerHandle,
+        this,
+        &ATargetLightMachine::UpdateOverheadHP,
+        0.1f,//0.1초마다
+        true
+    );
+}
+
 float ATargetLightMachine::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -84,8 +98,6 @@ void ATargetLightMachine::UpdateOverheadHP()
             HPBar->SetFillColorAndOpacity(LowHPColor);
         }
     }
-
-    
 
 }
 
