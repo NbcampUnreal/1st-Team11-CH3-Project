@@ -4,6 +4,7 @@
 #include "EnemyCharacter.h"
 #include "EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 #include "GameFramework/DamageType.h"
 
 // Sets default values
@@ -39,6 +40,12 @@ void AEnemyCharacter::SetRightHitbox(ECollisionEnabled::Type CollisionEnabled)
         RightHitbox->SetCollisionEnabled(CollisionEnabled);
 }
 
+void AEnemyCharacter::Die()
+{
+    DieCheker = true;
+    GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AEnemyCharacter::DestroyMyActor, 5.f, false);
+}
+
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
@@ -49,8 +56,37 @@ void AEnemyCharacter::DealDamage(AActor* OtherActor)
 {
     if (OtherActor)
     {
-        UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, GetController(), this, UDamageType::StaticClass());
+        if (OtherActor->ActorHasTag("Player"))
+        {
+            UGameplayStatics::ApplyDamage(OtherActor, DamageAmoun, GetController(), this, UDamageType::StaticClass());
+        }
     }
+}
+float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    // 기본 데미지 처리(옵션에 따라 부모 클래스를 호출할지 결정)
+    float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+    if (ActualDamage <= 0.f)
+    {
+        return 0.f;
+    }
+
+    // 체력 차감
+    CurrentHP -= ActualDamage;
+
+    // 체력이 0 이하이면 죽음 처리
+    if (CurrentHP <= 0.f)
+    {
+        Die();
+    }
+
+    return ActualDamage;
+}
+
+void AEnemyCharacter::DestroyMyActor()
+{
+    Destroy();
 }
 // Called every frame
 void AEnemyCharacter::Tick(float DeltaTime)

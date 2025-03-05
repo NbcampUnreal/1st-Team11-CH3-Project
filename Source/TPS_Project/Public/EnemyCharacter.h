@@ -19,10 +19,13 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
 	TArray<AActor*> PatrolPoints; 
     UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
-    float DamageAmount;
+    float MaxHP = 100.f;
+    UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
+    float DamageAmoun = 10;
     UPROPERTY(EditDefaultsOnly, Category = Hitbox)
     USphereComponent *LeftHitbox;
-
+    UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
+    bool DieCheker = false;
     UPROPERTY(EditDefaultsOnly, Category = Hitbox)
     USphereComponent *RightHitbox;
     UFUNCTION(BlueprintCallable)
@@ -31,18 +34,23 @@ public:
     void SetRightHitbox(ECollisionEnabled::Type CollisionEnabled);
     UFUNCTION(BlueprintCallable)
     void DealDamage(AActor* OtherActor);
+    virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
     const FName GetZombieType() const
     {
         return ZombieType;
     }
 
+    void Die();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
     FName ZombieType = "CommonZombie";
+    float CurrentHP = MaxHP;
+    FTimerHandle DeathTimerHandle;
+    void DestroyMyActor();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
