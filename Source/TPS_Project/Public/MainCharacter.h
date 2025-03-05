@@ -84,6 +84,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void PlayDamageAnim();
 
+    UFUNCTION(BlueprintCallable)
+    void GameOver();
+
     virtual float TakeDamage(float DamageAmount,
         struct FDamageEvent const& DamageEvent,
         AController* EventInstigator,
@@ -96,7 +99,7 @@ public:
     void Fire();
     void GunShotAnimation();
     void SetDamageState(bool HasDamage);
-    void GameOver();
+    
 
     int GetMaxAmmo();
     int CurrentAmmo();
