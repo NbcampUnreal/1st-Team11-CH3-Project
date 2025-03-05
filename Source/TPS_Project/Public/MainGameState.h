@@ -14,6 +14,7 @@ public:
 	AMainGameState();
 
 protected:
+    int32 FrameCount = 0;
     FName CurrentLevel;
 	int32 WaveCount;
 	int32 MaxWaveCount;
@@ -29,11 +30,18 @@ protected:
 	FTimerHandle WaveStartTimerHandle;
 	FTimerHandle WaveEndTimerHandle;
     FTimerHandle HUDUpdateTimerHandle;
+    FTimerHandle LightUpdateTimerHandle;
 
 
 public:
 	virtual void BeginPlay() override;
 
+    void UpdateSkyLight();
+    void ExecuteConsoleCommands();
+    void DisableAutoExposure();
+    void UpdateLightSettings();
+    void UpdateLightSettingsDelegate(UWorld* LoadedWorld);
+    void UpdateLightFirstFrame(UWorld* World, ELevelTick TickType, float DeltaTime);
 	void StartGame();
 	void StartWave();
 	void EndWave();
