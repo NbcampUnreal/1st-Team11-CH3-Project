@@ -48,7 +48,7 @@ protected:
     UAnimMontage* ReloadMontage;
 
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
-    UAnimMontage* DeathMontage;
+    UAnimSequence* DeathSequence;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
     bool bIsFire;
@@ -101,8 +101,8 @@ public:
     void SetDamageState(bool HasDamage);
     
 
-    int GetMaxAmmo();
-    int CurrentAmmo();
+    int GetMaxAmmo() const;
+    int CurrentAmmo() const;
 
 private:
     float Health;
