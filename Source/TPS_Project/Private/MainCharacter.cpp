@@ -93,6 +93,7 @@ void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 
 void AMainCharacter::Reload(const FInputActionValue& Value)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Reloading"));
     if (bIsGameOver) return;
     UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
@@ -190,10 +191,11 @@ void AMainCharacter::SetDamageState(bool HasDamage)
 void AMainCharacter::GameOver()
 {
     UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-    UE_LOG(LogTemp, Warning, TEXT("Game Over"));
+    
     if (AnimInstance && DeathMontage)
     {
         AnimInstance->Montage_Play(DeathMontage);
+        UE_LOG(LogTemp, Warning, TEXT("Game Over"));
     }
 }
 
@@ -220,7 +222,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
     EnhancedInput->BindAction(PlayerController->LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Completed, this, &AMainCharacter::StopGunFire);
-    EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacter::Reload);
+    EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Started, this, &AMainCharacter::Reload);
 }
 
 AMainWeapon* AMainCharacter::GetMainWeapon() const

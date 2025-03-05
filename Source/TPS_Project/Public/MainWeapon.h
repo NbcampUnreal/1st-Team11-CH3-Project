@@ -18,6 +18,8 @@ public:
     void Reload();
     float GetFireRate() const;
     void ActivateSoundParticle();
+    int GetMaxAmmo() const;
+    int CurrentAmmo() const;
 protected:
     virtual void BeginPlay() override;
 
