@@ -6,22 +6,9 @@
 #include "MainWeapon.h"
 #include "GameFramework/SpringArmComponent.h"
 
-// Sets default values
 AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
 {
-    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
-
-    //MainWeapon = CreateDefaultSubobject<AMainWeapon>(TEXT("MainWeapon"));
-    //MainWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
-
-    //StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-    //StaticMesh->SetupAttachment(GetMesh(), TEXT("Rifle"));
-    ////FAttachmentTransformRules AttachmentRules ( EAttachmentRule::SnapToTarget , true );
-    //StaticMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
-
-    //MuzzleFlash = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
-    //MuzzleFlash->SetupAttachment(StaticMesh);
 
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
     SpringArm->SetupAttachment(RootComponent);
@@ -38,7 +25,7 @@ AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
 void AMainCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    TestEquipWeapon();
+    EquipWeapon();
 }
 
 
@@ -91,15 +78,15 @@ void AMainCharacter::GunFire(const FInputActionValue& Value)
     {
         bIsFire = Value.Get<bool>();
 
-        //GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
-        MainWeapon->Fire();
+        GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
+        //MainWeapon->Fire();
     }
 }
 
 void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 {
     bIsFire = Value.Get<bool>();
-    //GetWorldTimerManager().ClearTimer(FireTimer);
+    GetWorldTimerManager().ClearTimer(FireTimer);
 }
 
 void AMainCharacter::Reload(const FInputActionValue& Value)
@@ -112,7 +99,7 @@ void AMainCharacter::Reload(const FInputActionValue& Value)
     }
 }
 
-void AMainCharacter::TestEquipWeapon()
+void AMainCharacter::EquipWeapon()
 {
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -126,6 +113,8 @@ void AMainCharacter::TestEquipWeapon()
     FRotator Rotator = FRotator(80.f, 90.f, -75.f);
     MainWeapon->SetActorRelativeLocation(Location);
     MainWeapon->SetActorRelativeRotation(Rotator);
+
+    FireRate = MainWeapon->GetFireRate();
 }
 
 float AMainCharacter::GetCharacterHealth() const
@@ -161,7 +150,7 @@ float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 void AMainCharacter::Fire()
 {
-    GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.1f, true);
+    GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, FireRate, true);
 }
 
 void AMainCharacter::GunShotAnimation()
@@ -209,5 +198,10 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Completed, this, &AMainCharacter::StopGunFire);
     EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacter::Reload);
+}
+
+AMainWeapon* AMainCharacter::GetMainWeapon() const
+{
+    return MainWeapon;
 }
 

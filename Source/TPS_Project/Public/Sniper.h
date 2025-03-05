@@ -11,7 +11,7 @@ class TPS_PROJECT_API ASniper : public AMainWeapon
 	
 public:	
 	ASniper();
-    virtual void Fire() override;
+    //virtual void StartFire() override;
 
 protected:
     virtual void BeginPlay() override;
