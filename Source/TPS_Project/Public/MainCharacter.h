@@ -3,8 +3,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "NiagaraSystem.h"
-#include "NiagaraComponent.h"
 #include "MainCharacter.generated.h"
 
 
@@ -30,18 +28,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
     USpringArmComponent* SpringArm;
 
-    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-    //UStaticMeshComponent* StaticMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
     AMainWeapon* MainWeapon;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
     TSubclassOf<AMainWeapon> TestWeapon;
-
-    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
-    //UNiagaraComponent* MuzzleFlash;
-
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
     float NormalSpeed;
@@ -66,10 +58,11 @@ protected:
 
     FTimerHandle FireTimer;
 
-
-
 public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    UFUNCTION()
+    AMainWeapon* GetMainWeapon() const;
 
     UFUNCTION()
     void Move(const FInputActionValue& Value);
@@ -86,7 +79,7 @@ public:
     UFUNCTION()
     void Reload(const FInputActionValue& Value);
     UFUNCTION()
-    void TestEquipWeapon();
+    void EquipWeapon();
 
     UFUNCTION(BlueprintCallable)
     void PlayDamageAnim();
@@ -110,4 +103,5 @@ private:
     float Health;
     int Ammo;
     bool bIsGameOver;
+    float FireRate;
 };

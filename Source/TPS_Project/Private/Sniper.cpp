@@ -12,20 +12,20 @@ void ASniper::BeginPlay()
     Super::BeginPlay();
 }
 
-void ASniper::Fire()
-{
-    if (AmmoCount > 0)
-    {
-        Super::Fire();
-        AmmoCount--;
-        SetFOV(ZoomedFOV);
-        UE_LOG(LogTemp, Warning, TEXT("탄약 : %d"), AmmoCount);
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("재장전 필요"));
-    }
-}
+//void ASniper::StartFire()
+//{
+//    if (AmmoCount > 0)
+//    {
+//        Super::StartFire();
+//        AmmoCount--;
+//        SetFOV(ZoomedFOV);
+//        UE_LOG(LogTemp, Warning, TEXT("탄약 : %d"), AmmoCount);
+//    }
+//    else
+//    {
+//        UE_LOG(LogTemp, Warning, TEXT("재장전 필요"));
+//    }
+//}
 
 void ASniper::SetFOV(float NewFOV)
 {

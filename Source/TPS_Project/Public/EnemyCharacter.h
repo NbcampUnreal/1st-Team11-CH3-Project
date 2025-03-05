@@ -17,8 +17,9 @@ public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
-	TArray<AActor*> PatrolPoints;
-
+	TArray<AActor*> PatrolPoints; 
+    UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
+    float DamageAmount;
     UPROPERTY(EditDefaultsOnly, Category = Hitbox)
     USphereComponent *LeftHitbox;
 
@@ -28,6 +29,8 @@ public:
     void SetLeftHitbox(ECollisionEnabled::Type CollisionEnabled); 
     UFUNCTION(BlueprintCallable)
     void SetRightHitbox(ECollisionEnabled::Type CollisionEnabled);
+    UFUNCTION(BlueprintCallable)
+    void DealDamage(AActor* OtherActor);
 
     const FName GetZombieType() const
     {
