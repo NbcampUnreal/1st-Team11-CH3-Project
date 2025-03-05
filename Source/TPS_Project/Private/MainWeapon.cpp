@@ -31,8 +31,12 @@ void AMainWeapon::StartFire()
     {
         PerformLineTrace();
         ActivateSoundParticle();
-        //AmmoCount--;
+        AmmoCount--;
         UE_LOG(LogTemp, Warning, TEXT("남은 탄약 : %d"), AmmoCount);
+    }
+    else
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, EmptyAmmoSound, GetActorLocation());
     }
 }
 
@@ -69,7 +73,6 @@ void AMainWeapon::PerformLineTrace()
     {
         UE_LOG(LogTemp, Warning, TEXT("Hit Object: %s"), *HitResult.GetActor()->GetName());
 
-        // 📌 충돌 지점에 디버그 구 표시
         DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 12, FColor::Red, false, 2.0f);
         AActor* HitActor = HitResult.GetActor();
         if (HitActor->ActorHasTag("Enemy"))
@@ -87,7 +90,7 @@ void AMainWeapon::Reload()
     {
         bCanFire = false;
         UE_LOG(LogTemp, Warning, TEXT("재장전 중..."));
-
+        UGameplayStatics::PlaySoundAtLocation(this, GunReloadSound, GetActorLocation());
         GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &AMainWeapon::FinishReload, ReloadTime, false);
     }
 }
@@ -109,4 +112,14 @@ void AMainWeapon::ActivateSoundParticle()
     UE_LOG(LogTemp, Warning, TEXT("Activate Particle"));
     MuzzleFlash->Activate();
     UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
+}
+
+int AMainWeapon::GetMaxAmmo() const
+{
+    return MaxAmmo;
+}
+
+int AMainWeapon::CurrentAmmo() const
+{
+    return AmmoCount;
 }

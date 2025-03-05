@@ -95,9 +95,11 @@ public:
 
     void Fire();
     void GunShotAnimation();
-    void ActivateMuzzle();
     void SetDamageState(bool HasDamage);
     void GameOver();
+
+    int GetMaxAmmo();
+    int CurrentAmmo();
 
 private:
     float Health;
