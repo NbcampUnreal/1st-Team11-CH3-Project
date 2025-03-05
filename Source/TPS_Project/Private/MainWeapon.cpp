@@ -86,13 +86,13 @@ void AMainWeapon::PerformLineTrace()
 
 void AMainWeapon::Reload()
 {
-    if (AmmoCount < MaxAmmo)
-    {
-        bCanFire = false;
-        UE_LOG(LogTemp, Warning, TEXT("재장전 중..."));
-        UGameplayStatics::PlaySoundAtLocation(this, GunReloadSound, GetActorLocation());
-        GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &AMainWeapon::FinishReload, ReloadTime, false);
-    }
+    //if (AmmoCount < MaxAmmo)
+    //{
+    bCanFire = false;
+    UE_LOG(LogTemp, Warning, TEXT("재장전 중..."));
+    UGameplayStatics::PlaySoundAtLocation(this, GunReloadSound, GetActorLocation());
+    GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &AMainWeapon::FinishReload, ReloadTime, false);
+    //}
 }
 
 float AMainWeapon::GetFireRate() const

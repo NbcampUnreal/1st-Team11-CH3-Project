@@ -5,6 +5,7 @@
 #include "MainPlayerController.h"
 #include "MainWeapon.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "MainGameState.h"
 
 AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
 {
@@ -50,6 +51,7 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 
 void AMainCharacter::Look(const FInputActionValue& Value)
 {
+    if (bIsGameOver) return;
     FVector2D LookInput = Value.Get<FVector2D>();
 
     AddControllerYawInput(LookInput.X);
@@ -192,19 +194,26 @@ void AMainCharacter::GameOver()
 {
     UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
     
-    if (AnimInstance && DeathMontage)
+    if (AnimInstance && DeathSequence)
     {
-        AnimInstance->Montage_Play(DeathMontage);
+        GetMesh()->PlayAnimation(DeathSequence, false);
+        bIsGameOver = true;
         UE_LOG(LogTemp, Warning, TEXT("Game Over"));
+
+        AMainGameState* MainGameState = GetWorld()->GetGameState<AMainGameState>();
+        if (MainGameState)
+        {
+            MainGameState->GameOver();
+        }
     }
 }
 
-int AMainCharacter::GetMaxAmmo()
+int AMainCharacter::GetMaxAmmo() const
 {
     return MainWeapon->GetMaxAmmo();
 }
 
-int AMainCharacter::CurrentAmmo()
+int AMainCharacter::CurrentAmmo() const
 {
     return MainWeapon->CurrentAmmo();
 }
