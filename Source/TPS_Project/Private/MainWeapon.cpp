@@ -69,7 +69,6 @@ void AMainWeapon::PerformLineTrace()
     {
         UE_LOG(LogTemp, Warning, TEXT("Hit Object: %s"), *HitResult.GetActor()->GetName());
 
-        // 📌 충돌 지점에 디버그 구 표시
         DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 12, FColor::Red, false, 2.0f);
         AActor* HitActor = HitResult.GetActor();
         if (HitActor->ActorHasTag("Enemy"))
