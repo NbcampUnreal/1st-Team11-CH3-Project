@@ -3,6 +3,8 @@
 
 #include "EnemyCharacter.h"
 #include "EnemyAIController.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -10,7 +12,7 @@ AEnemyCharacter::AEnemyCharacter()
 	AIControllerClass = AEnemyAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	PrimaryActorTick.bCanEverTick = false;
-
+    this->Tags.Add(FName(TEXT("Enemy")));
 
     LeftHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHitbox"));
     RightHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("RightHitbox"));
@@ -43,6 +45,13 @@ void AEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AEnemyCharacter::DealDamage(AActor* OtherActor)
+{
+    if (OtherActor)
+    {
+        UGameplayStatics::ApplyDamage(OtherActor, DamageAmount, GetController(), this, UDamageType::StaticClass());
+    }
+}
 // Called every frame
 void AEnemyCharacter::Tick(float DeltaTime)
 {

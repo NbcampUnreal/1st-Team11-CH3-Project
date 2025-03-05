@@ -3,21 +3,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputComponent.h"
 #include "MainPlayerController.h"
+#include "MainWeapon.h"
 #include "GameFramework/SpringArmComponent.h"
 
-// Sets default values
-AMainCharacter::AMainCharacter()
+AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
 {
-    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
-
-    StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-    StaticMesh->SetupAttachment(GetMesh(), TEXT("Rifle"));
-    //FAttachmentTransformRules AttachmentRules ( EAttachmentRule::SnapToTarget , true );
-    StaticMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
-
-    MuzzleFlash = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particle"));
-    MuzzleFlash->SetupAttachment(StaticMesh);
 
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
     SpringArm->SetupAttachment(RootComponent);
@@ -34,7 +25,10 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    EquipWeapon();
 }
+
+
 
 void AMainCharacter::Move(const FInputActionValue& Value)
 {
@@ -85,6 +79,7 @@ void AMainCharacter::GunFire(const FInputActionValue& Value)
         bIsFire = Value.Get<bool>();
 
         GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
+        //MainWeapon->Fire();
     }
 }
 
@@ -102,6 +97,24 @@ void AMainCharacter::Reload(const FInputActionValue& Value)
     {
         AnimInstance->Montage_Play(ReloadMontage);
     }
+}
+
+void AMainCharacter::EquipWeapon()
+{
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+    MainWeapon = GetWorld()->SpawnActor<AMainWeapon>(TestWeapon);
+    MainWeapon->SetOwner(this);
+    MainWeapon->SetActorEnableCollision(false);
+    MainWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
+
+    FVector Location = FVector(0, -3.5f, 2.0f);
+    FRotator Rotator = FRotator(80.f, 90.f, -75.f);
+    MainWeapon->SetActorRelativeLocation(Location);
+    MainWeapon->SetActorRelativeRotation(Rotator);
+
+    FireRate = MainWeapon->GetFireRate();
 }
 
 float AMainCharacter::GetCharacterHealth() const
@@ -131,14 +144,13 @@ void AMainCharacter::PlayDamageAnim()
 
 float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-
     PlayDamageAnim();
     return DamageAmount;
 }
 
 void AMainCharacter::Fire()
 {
-    GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.1f, true);
+    GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, FireRate, true);
 }
 
 void AMainCharacter::GunShotAnimation()
@@ -154,7 +166,7 @@ void AMainCharacter::GunShotAnimation()
 // 총기 클래스로 옮겨갈 수도 있음
 void AMainCharacter::ActivateMuzzle()
 {
-    MuzzleFlash->Activate();
+    //MuzzleFlash->Activate();
 }
 
 void AMainCharacter::SetDamageState(bool HasDamage)
@@ -186,5 +198,10 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Completed, this, &AMainCharacter::StopGunFire);
     EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacter::Reload);
+}
+
+AMainWeapon* AMainCharacter::GetMainWeapon() const
+{
+    return MainWeapon;
 }
 

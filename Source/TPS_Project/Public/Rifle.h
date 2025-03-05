@@ -11,14 +11,11 @@ class TPS_PROJECT_API ARifle : public AMainWeapon
 
 public:
     ARifle();
-    virtual void Fire() override;
+    //virtual void StartFire() override;
 
 protected:
     virtual void BeginPlay() override;
 
 private:
-    void StartFire();
-    void StopFire();
-
     FTimerHandle FireTimer;
 };
