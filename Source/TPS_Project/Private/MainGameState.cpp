@@ -43,7 +43,7 @@ void AMainGameState::BeginPlay()
 
         // Delegate에 바인딩되는 함수는 void ::함수이름(UWorld* World, ELevelTick TickType, float DeltaTime) 형태의 시그니처를 가져야함
         // OnWorldPostActorTick : 현재 프레임 끝나기 직전에 실행
-        FWorldDelegates::OnWorldPostActorTick.AddUObject(this, &AMainGameState::UpdateLightFirstFrame);
+        //FWorldDelegates::OnWorldPostActorTick.AddUObject(this, &AMainGameState::UpdateLightFirstFrame);
     }
 }
 
@@ -64,6 +64,18 @@ void AMainGameState::UpdateSkyLight()
             {
                 // SkyLight 강제 업데이트
                 SkyLightComp->RecaptureSky();
+
+                // Sky Light의 위치가 변경되면 자동으로 환경을 다시 캡처
+                //FVector NewLocation = SkyLight->GetActorLocation() + FVector(0, 0, 1); // 1cm 이동
+                //SkyLight->SetActorLocation(NewLocation);
+
+                // Sky Light를 숨겼다가 다시 보이게 하면 자동으로 환경을 캡처
+                //SkyLight->SetActorHiddenInGame(true);
+                //FTimerHandle TimerHandle;
+                //GetWorld()->GetTimerManager().SetTimer(TimerHandle, [SkyLight]()
+                //    {
+                //        SkyLight->SetActorHiddenInGame(false);
+                //    }, 0.1f, false);
             }
         }
     }
@@ -74,14 +86,19 @@ void AMainGameState::ExecuteConsoleCommands()
 {
     if (GEngine)
     {
-        GEngine->Exec(GetWorld(), TEXT("r.ForceAllCastsDynamicShadow 1"));  // 그림자 동적 적용
-        GEngine->Exec(GetWorld(), TEXT("r.TonemapperFilm 1"));              // 색상 톤 매핑을 강제 적용하여 밝기 보정
-        GEngine->Exec(GetWorld(), TEXT("r.ExposureOffset 1"));              // 전체 노출 값 조정
-        GEngine->Exec(GetWorld(), TEXT("r.LightPropagationVolume 1"));      // 라이팅을 강제로 다시 적용
-        GEngine->Exec(GetWorld(), TEXT("r.HZBOcclusion 0"));                // 레벨 로드 후 씬 가시성 오류 해결
+        GEngine->Exec(GetWorld(), TEXT("r.Cache.LightingCache 0"));
+        
+        GEngine->Exec(GetWorld(), TEXT("r.EyeAdaptationQuality 0"));
+        GEngine->Exec(GetWorld(), TEXT("r.OneFrameThreadLag 0"));
 
-        GEngine->Exec(GetWorld(), TEXT("r.ClearScene 1"));                  // 씬을 강제로 다시 렌더링
-        GEngine->Exec(GetWorld(), TEXT("r.TemporalAA.Upsampling 1"));       // TAA(Temporal Anti-Aliasing) 문제 해결
+        //GEngine->Exec(GetWorld(), TEXT("r.ForceAllCastsDynamicShadow 1"));  // 그림자 동적 적용
+        //GEngine->Exec(GetWorld(), TEXT("r.TonemapperFilm 1"));              // 색상 톤 매핑을 강제 적용하여 밝기 보정
+        //GEngine->Exec(GetWorld(), TEXT("r.ExposureOffset 1"));              // 전체 노출 값 조정
+        //GEngine->Exec(GetWorld(), TEXT("r.LightPropagationVolume 1"));      // 라이팅을 강제로 다시 적용
+        //GEngine->Exec(GetWorld(), TEXT("r.HZBOcclusion 0"));                // 레벨 로드 후 씬 가시성 오류 해결
+        //
+        //GEngine->Exec(GetWorld(), TEXT("r.ClearScene 1"));                  // 씬을 강제로 다시 렌더링
+        //GEngine->Exec(GetWorld(), TEXT("r.TemporalAA.Upsampling 1"));       // TAA(Temporal Anti-Aliasing) 문제 해결
     }
 }
 
@@ -121,7 +138,7 @@ void AMainGameState::UpdateLightSettings()
 
     UpdateSkyLight();
 
-    ExecuteConsoleCommands();
+    //ExecuteConsoleCommands();
 }
 
 void AMainGameState::UpdateLightSettingsDelegate(UWorld* LoadedWorld)
@@ -130,7 +147,7 @@ void AMainGameState::UpdateLightSettingsDelegate(UWorld* LoadedWorld)
 
     UpdateSkyLight();
 
-    ExecuteConsoleCommands();
+    //ExecuteConsoleCommands();
 }
 
 void AMainGameState::UpdateLightFirstFrame(UWorld* World, ELevelTick TickType, float DeltaTime)
