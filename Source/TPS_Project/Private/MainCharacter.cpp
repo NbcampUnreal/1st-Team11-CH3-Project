@@ -91,14 +91,15 @@ void AMainCharacter::GunFire(const FInputActionValue& Value)
     {
         bIsFire = Value.Get<bool>();
 
-        GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
+        //GetWorldTimerManager().SetTimer(FireTimer, this, &AMainCharacter::GunShotAnimation, 0.2f, true);
+        MainWeapon->Fire();
     }
 }
 
 void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 {
     bIsFire = Value.Get<bool>();
-    GetWorldTimerManager().ClearTimer(FireTimer);
+    //GetWorldTimerManager().ClearTimer(FireTimer);
 }
 
 void AMainCharacter::Reload(const FInputActionValue& Value)
@@ -116,15 +117,14 @@ void AMainCharacter::TestEquipWeapon()
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-    FVector Location = FVector(0, -3.5f, 2.0f);
-    FRotator Rotator = GetMesh()->GetSocketRotation(TEXT("RightHandRifle")) + FRotator(-75.f, 80.f, 90.f);
-        
     MainWeapon = GetWorld()->SpawnActor<AMainWeapon>(TestWeapon);
     MainWeapon->SetOwner(this);
     MainWeapon->SetActorEnableCollision(false);
     MainWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName(TEXT("RightHandRifle")));
-    MainWeapon->SetActorRelativeLocation(Location);
 
+    FVector Location = FVector(0, -3.5f, 2.0f);
+    FRotator Rotator = FRotator(80.f, 90.f, -75.f);
+    MainWeapon->SetActorRelativeLocation(Location);
     MainWeapon->SetActorRelativeRotation(Rotator);
 }
 
