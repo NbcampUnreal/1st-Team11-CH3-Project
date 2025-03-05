@@ -1,6 +1,8 @@
 #include "TargetLightMachine.h"
 #include "MainGameState.h"
 #include "Components/BoxComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Components/ProgressBar.h"
 
 ATargetLightMachine::ATargetLightMachine()
 {
@@ -17,6 +19,12 @@ ATargetLightMachine::ATargetLightMachine()
 
 	MaxHealth = 5000.0f;
 	Health = MaxHealth;
+
+
+    OverheadWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("OverheadWidget"));
+    OverheadWidget->SetupAttachment(StaticMeshComp/*GetMesh()*/);
+    OverheadWidget->SetWidgetSpace(EWidgetSpace::Screen); // 스크린모드 
+
 
     Tags.Add(TEXT("Target"));
 }
@@ -41,5 +49,43 @@ void ATargetLightMachine::OnTargetDestroy()
 	{
 		MainGameState->GameOver();
 	}
+}
+
+void ATargetLightMachine::UpdateOverheadHP()
+{
+    if (!OverheadWidget) return; // 제대로 존재하는지..
+
+    // 1) OverheadWidgetInstance가져옥
+    UUserWidget* OverheadWidgetInstance = OverheadWidget->GetUserWidgetObject();
+    if (!OverheadWidgetInstance) return;
+
+    // 2) HealthBar Progress 
+    if (UProgressBar* HPBar = Cast<UProgressBar>(OverheadWidgetInstance->GetWidgetFromName(TEXT("OverheadHPBar"))))
+    {
+        // 범위는 0.0~1.0으로 해야함
+        // Health / MaxHealth 
+        float HPPercent = 0.f;
+        if (MaxHealth > 0.f)
+        {
+            
+            HPPercent = Health / 100.f;
+        }
+        HPBar->SetPercent(HPPercent);
+
+        // HPPercent가 낮으면 빨갛게 
+        if (HPPercent < 0.3f)
+        {
+            FLinearColor LowHPColor = FLinearColor::Red;
+            HPBar->SetFillColorAndOpacity(LowHPColor);
+        }
+        else
+        {
+            FLinearColor LowHPColor = FLinearColor::Green;
+            HPBar->SetFillColorAndOpacity(LowHPColor);
+        }
+    }
+
+    
+
 }
 
