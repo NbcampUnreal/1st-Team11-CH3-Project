@@ -12,7 +12,7 @@ AEnemyCharacter::AEnemyCharacter()
 	AIControllerClass = AEnemyAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	PrimaryActorTick.bCanEverTick = false;
-
+    this->Tags.Add(FName(TEXT("Enemy")));
 
     LeftHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHitbox"));
     RightHitbox = CreateDefaultSubobject<USphereComponent>(TEXT("RightHitbox"));
