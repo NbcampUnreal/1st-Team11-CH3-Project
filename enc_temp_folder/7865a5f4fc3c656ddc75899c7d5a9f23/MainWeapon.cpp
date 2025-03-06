@@ -161,7 +161,7 @@ void AMainWeapon::ActivateSoundParticle(const FVector& StartPos, FVector EndPos)
 
     UE_LOG(LogTemp, Error, TEXT("%d"), EndPoss.Num());
     UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(ShotTracerComponent, TEXT("User.ImpactPositions"), EndPoss);
-    ShotTracerComponent->SetNiagaraVariableBool(TEXT("User.Trigger"), true);
+    //ShotTracerComponent->SetNiagaraVariableBool(TEXT("User.Trigger"), true);
 
 
     ShotTracerComponent->Activate();
