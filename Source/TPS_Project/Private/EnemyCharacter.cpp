@@ -68,7 +68,7 @@ void AEnemyCharacter::DealDamage(AActor* OtherActor)
 {
     if (OtherActor)
     {
-        if (OtherActor->ActorHasTag("Player"))
+        if (OtherActor->ActorHasTag("Player") || OtherActor->ActorHasTag("Target"))
         {
             UGameplayStatics::ApplyDamage(OtherActor, DamageAmoun, GetController(), this, UDamageType::StaticClass());
         }
