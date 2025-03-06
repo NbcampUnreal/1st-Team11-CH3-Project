@@ -42,6 +42,10 @@ void ATargetLightMachine::BeginPlay()
         true
     );
 }
+float ATargetLightMachine::GetTargetHealth() const
+{
+    return Health;
+}
 
 float ATargetLightMachine::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
@@ -61,7 +65,7 @@ void ATargetLightMachine::OnTargetDestroy()
 	AMainGameState* MainGameState = GetWorld() ? GetWorld()->GetGameState<AMainGameState>() : nullptr;
 	if (MainGameState)
 	{
-		MainGameState->GameOver();
+		MainGameState->GameOver(false);
 	}
 }
 

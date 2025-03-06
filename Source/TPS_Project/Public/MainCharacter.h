@@ -48,7 +48,7 @@ protected:
     UAnimMontage* ReloadMontage;
 
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
-    UAnimMontage* DeathMontage;
+    UAnimSequence* DeathSequence;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
     bool bIsFire;
@@ -84,6 +84,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void PlayDamageAnim();
 
+    UFUNCTION(BlueprintCallable)
+    void GameOver();
+
     virtual float TakeDamage(float DamageAmount,
         struct FDamageEvent const& DamageEvent,
         AController* EventInstigator,
@@ -95,9 +98,11 @@ public:
 
     void Fire();
     void GunShotAnimation();
-    void ActivateMuzzle();
     void SetDamageState(bool HasDamage);
-    void GameOver();
+    
+
+    int GetMaxAmmo() const;
+    int CurrentAmmo() const;
 
 private:
     float Health;

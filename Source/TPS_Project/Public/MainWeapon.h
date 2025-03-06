@@ -18,6 +18,8 @@ public:
     void Reload();
     float GetFireRate() const;
     void ActivateSoundParticle();
+    int GetMaxAmmo() const;
+    int CurrentAmmo() const;
 protected:
     virtual void BeginPlay() override;
 
@@ -47,6 +49,12 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
     USoundBase* GunFireSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    USoundBase* GunReloadSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    USoundBase* EmptyAmmoSound;
 
    
 

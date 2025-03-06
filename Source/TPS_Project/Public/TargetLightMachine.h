@@ -36,6 +36,8 @@ protected:
 
     FTimerHandle HUDUpdateTimerHandle;
 
+public:
+    float GetTargetHealth() const;
 	
 protected:
     virtual void BeginPlay() override;

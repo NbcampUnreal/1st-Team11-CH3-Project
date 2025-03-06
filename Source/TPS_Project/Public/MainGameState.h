@@ -14,6 +14,7 @@ public:
 	AMainGameState();
 
 protected:
+    int32 FrameCount = 0;
     FName CurrentLevel;
 	int32 WaveCount;
 	int32 MaxWaveCount;
@@ -29,16 +30,23 @@ protected:
 	FTimerHandle WaveStartTimerHandle;
 	FTimerHandle WaveEndTimerHandle;
     FTimerHandle HUDUpdateTimerHandle;
+    FTimerHandle LightUpdateTimerHandle;
 
 
 public:
 	virtual void BeginPlay() override;
 
+    void UpdateSkyLight();
+    void ExecuteConsoleCommands();
+    void DisableAutoExposure();
+    void UpdateLightSettings();
+    void UpdateLightSettingsDelegate(UWorld* LoadedWorld);
+    void UpdateLightFirstFrame(UWorld* World, ELevelTick TickType, float DeltaTime);
 	void StartGame();
 	void StartWave();
 	void EndWave();
 	void DefenceLevelTimeUp();
-	void GameOver();
+	void GameOver(bool bIsClear);
 
     // HUD 어떤식으로 정보 업데이트 할건지? (웨이브시간초, 체력바, 총알개수?) 
     void UpdateHUD();

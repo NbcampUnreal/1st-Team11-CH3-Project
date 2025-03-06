@@ -52,6 +52,13 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Mission")
     TSubclassOf<UUserWidget> MissionWidgetClass;
 
+    // 게임 오버 메뉴 UI
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Menu");
+    TSubclassOf<UUserWidget> GameOverMenuWidgetClass;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Menu")
+    UUserWidget* GameOverMenuWidgetInstance;
+
+
     
 
 
@@ -73,6 +80,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Menu")
 	// MainMenu-> Game 시작
 	void StartGame();
+
+    UFUNCTION(BlueprintCallable, Category = "Menu")
+    void StartMainMenu();
+
+    UFUNCTION(BlueprintCallable, Category = "Menu")
+    void ShowGameOverMenu(bool bIsClear);
+
+    UFUNCTION(BlueprintCallable, Category = "Menu")
+    void ExitGame();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Input")
 	UInputAction* ReloadAction;

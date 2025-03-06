@@ -5,6 +5,7 @@
 #include "MainPlayerController.h"
 #include "MainWeapon.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "MainGameState.h"
 
 AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
 {
@@ -17,8 +18,10 @@ AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
+    bIsGameOver = false;
     NormalSpeed = 600.0f;
     bHasDamage = false;
+    Health = 100.f;
 }
 
 // Called when the game starts or when spawned
@@ -32,7 +35,7 @@ void AMainCharacter::BeginPlay()
 
 void AMainCharacter::Move(const FInputActionValue& Value)
 {
-    if (!Controller) return;
+    if (!Controller || bIsGameOver) return;
     const FVector MoveInput = Value.Get<FVector>();
 
     if (!FMath::IsNearlyZero(MoveInput.X))
@@ -48,6 +51,7 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 
 void AMainCharacter::Look(const FInputActionValue& Value)
 {
+    if (bIsGameOver) return;
     FVector2D LookInput = Value.Get<FVector2D>();
 
     AddControllerYawInput(LookInput.X);
@@ -58,7 +62,7 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 
 void AMainCharacter::StartJump(const FInputActionValue& Value)
 {
-    if (Value.Get<bool>())
+    if (Value.Get<bool>() || !bIsGameOver)
     {
         Jump();
     }
@@ -66,7 +70,7 @@ void AMainCharacter::StartJump(const FInputActionValue& Value)
 
 void AMainCharacter::StopJump(const FInputActionValue& Value)
 {
-    if (!Value.Get<bool>())
+    if (!Value.Get<bool>() || !bIsGameOver)
     {
         StopJumping();
     }
@@ -74,7 +78,7 @@ void AMainCharacter::StopJump(const FInputActionValue& Value)
 
 void AMainCharacter::GunFire(const FInputActionValue& Value)
 {
-    if (Value.Get<bool>() && !bHasDamage)
+    if (Value.Get<bool>() && !bHasDamage && !bIsGameOver)
     {
         bIsFire = Value.Get<bool>();
 
@@ -91,11 +95,14 @@ void AMainCharacter::StopGunFire(const FInputActionValue& Value)
 
 void AMainCharacter::Reload(const FInputActionValue& Value)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Reloading"));
+    if (bIsGameOver) return;
     UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
     if (AnimInstance && ReloadMontage)
     {
         AnimInstance->Montage_Play(ReloadMontage);
+        MainWeapon->Reload();
     }
 }
 
@@ -129,6 +136,8 @@ void AMainCharacter::SetCharacterHealth(float Value)
 
 void AMainCharacter::PlayDamageAnim()
 {
+    if (bIsGameOver) return;
+
     GetWorldTimerManager().ClearTimer(FireTimer);
     bIsFire = false;
     bHasDamage = true;
@@ -144,7 +153,20 @@ void AMainCharacter::PlayDamageAnim()
 
 float AMainCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+    if (bIsGameOver) return 0.f;
+
     PlayDamageAnim();
+
+    Health -= DamageAmount;
+
+    if (Health <= 0)
+    {
+        Health = 0;
+        GameOver();
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("Health : %f"), Health);
+
     return DamageAmount;
 }
 
@@ -163,12 +185,6 @@ void AMainCharacter::GunShotAnimation()
     }
 }
 
-// 총기 클래스로 옮겨갈 수도 있음
-void AMainCharacter::ActivateMuzzle()
-{
-    //MuzzleFlash->Activate();
-}
-
 void AMainCharacter::SetDamageState(bool HasDamage)
 {
     bHasDamage = HasDamage;
@@ -177,11 +193,29 @@ void AMainCharacter::SetDamageState(bool HasDamage)
 void AMainCharacter::GameOver()
 {
     UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-    if (AnimInstance && DeathMontage)
+    
+    if (AnimInstance && DeathSequence)
     {
-        AnimInstance->Montage_Play(DeathMontage);
+        GetMesh()->PlayAnimation(DeathSequence, false);
+        bIsGameOver = true;
+        UE_LOG(LogTemp, Warning, TEXT("Game Over"));
+
+        AMainGameState* MainGameState = GetWorld()->GetGameState<AMainGameState>();
+        if (MainGameState)
+        {
+            MainGameState->GameOver(false);
+        }
     }
+}
+
+int AMainCharacter::GetMaxAmmo() const
+{
+    return MainWeapon->GetMaxAmmo();
+}
+
+int AMainCharacter::CurrentAmmo() const
+{
+    return MainWeapon->CurrentAmmo();
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -197,7 +231,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
     EnhancedInput->BindAction(PlayerController->LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Triggered, this, &AMainCharacter::GunFire);
     EnhancedInput->BindAction(PlayerController->GunFireAction, ETriggerEvent::Completed, this, &AMainCharacter::StopGunFire);
-    EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacter::Reload);
+    EnhancedInput->BindAction(PlayerController->ReloadAction, ETriggerEvent::Started, this, &AMainCharacter::Reload);
 }
 
 AMainWeapon* AMainCharacter::GetMainWeapon() const
