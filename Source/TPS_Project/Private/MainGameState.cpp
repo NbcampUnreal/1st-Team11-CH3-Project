@@ -311,14 +311,32 @@ void AMainGameState::DefenceLevelTimeUp()
             }
         }
     }
+
+    if (CurrentLevel == "BossLevel")
+    {
+        GameOver(true);
+    }
 }
 
-void AMainGameState::GameOver()
+void AMainGameState::GameOver(bool bIsClear)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Game Over!")));
 
-	// todo; 게임오버시 메인메뉴보이게? ...
-
+    if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+    {
+        if (AMainPlayerController* MainPlayerController = Cast<AMainPlayerController>(PlayerController))
+        {
+            MainPlayerController->SetPause(true);
+            if (bIsClear)
+            {
+                MainPlayerController->ShowGameOverMenu(bIsClear);
+            }
+            else
+            {
+                MainPlayerController->ShowGameOverMenu(bIsClear);
+            }
+        }
+    }
 }
 
 void AMainGameState::SetCurrentLevel(FName Level)
