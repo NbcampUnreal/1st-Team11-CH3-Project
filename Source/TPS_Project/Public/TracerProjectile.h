@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "TracerProjectile.generated.h"
 
 UCLASS()
@@ -12,15 +14,23 @@ class TPS_PROJECT_API ATracerProjectile : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
+
 	ATracerProjectile();
+    void InitTracer(const FVector& StartPoint, const FVector& EndPoint);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
+	virtual void BeginPlay() override;
+private:
+    UPROPERTY(VisibleAnywhere)
+    UNiagaraComponent* TracerEffect;
+
+    FVector TargetLocation;
+
+    UPROPERTY(EditAnywhere, Category = "Tracer")
+    float Speed = 10000.0f;  // 탄환 속도
 public:	
-	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
 
 };

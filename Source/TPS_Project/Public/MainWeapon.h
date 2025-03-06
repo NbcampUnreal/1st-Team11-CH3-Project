@@ -6,6 +6,7 @@
 
 class UNiagaraComponent;
 class UNiagaraSystem;
+class ATracerProjectile;
 
 
 UCLASS()
@@ -52,7 +53,7 @@ protected:
     UNiagaraSystem* ShotImpact;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
-    UNiagaraSystem* ShotTracer;
+    TSubclassOf<ATracerProjectile> TracerClass;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
     USoundBase* GunFireSound;

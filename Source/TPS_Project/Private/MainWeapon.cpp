@@ -4,6 +4,7 @@
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "TracerProjectile.h"
 
 
 
@@ -33,7 +34,7 @@ void AMainWeapon::StartFire()
         PerformLineTrace();
         ActivateSoundParticle();
         AmmoCount--;
-        UE_LOG(LogTemp, Warning, TEXT("남은 탄약 : %d"), AmmoCount);
+        //UE_LOG(LogTemp, Warning, TEXT("남은 탄약 : %d"), AmmoCount);
     }
     else
     {
@@ -70,6 +71,12 @@ void AMainWeapon::PerformLineTrace()
         TraceParams
     );
 
+    ATracerProjectile* Tracer = GetWorld()->SpawnActor<ATracerProjectile>(TracerClass, CameraLocation, FRotator::ZeroRotator);
+    if (Tracer)
+    {
+        Tracer->InitTracer(CameraLocation, EndLocation);
+    }
+
     if (bHit)
     {
         UE_LOG(LogTemp, Warning, TEXT("Hit Object: %s"), *HitResult.GetActor()->GetName());
@@ -99,13 +106,10 @@ void AMainWeapon::PerformLineTrace()
 
 void AMainWeapon::Reload()
 {
-    //if (AmmoCount < MaxAmmo)
-    //{
     bCanFire = false;
     UE_LOG(LogTemp, Warning, TEXT("재장전 중..."));
     UGameplayStatics::PlaySoundAtLocation(this, GunReloadSound, GetActorLocation());
     GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &AMainWeapon::FinishReload, ReloadTime, false);
-    //}
 }
 
 float AMainWeapon::GetFireRate() const
@@ -122,7 +126,6 @@ void AMainWeapon::FinishReload()
 
 void AMainWeapon::ActivateSoundParticle()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Activate Particle"));
     MuzzleFlash->Activate();
     UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
 }
