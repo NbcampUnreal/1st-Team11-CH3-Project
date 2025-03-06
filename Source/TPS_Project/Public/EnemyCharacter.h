@@ -19,7 +19,7 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
 	TArray<AActor*> PatrolPoints; 
     UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
-    float MaxHP = 75.f;
+    float MaxHP = 50.f;
     UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI")
     float DamageAmoun = 10;
     UPROPERTY(EditDefaultsOnly, Category = Hitbox)
