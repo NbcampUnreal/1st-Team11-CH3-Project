@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Target|Health")
 	float MaxHealth;
 	float Health;
+
+public:
+    float GetTargetHealth() const;
 	
 protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;

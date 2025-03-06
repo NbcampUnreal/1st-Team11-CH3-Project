@@ -21,6 +21,11 @@ ATargetLightMachine::ATargetLightMachine()
     Tags.Add(TEXT("Target"));
 }
 
+float ATargetLightMachine::GetTargetHealth() const
+{
+    return Health;
+}
+
 float ATargetLightMachine::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -39,7 +44,7 @@ void ATargetLightMachine::OnTargetDestroy()
 	AMainGameState* MainGameState = GetWorld() ? GetWorld()->GetGameState<AMainGameState>() : nullptr;
 	if (MainGameState)
 	{
-		MainGameState->GameOver();
+		MainGameState->GameOver(false);
 	}
 }
 

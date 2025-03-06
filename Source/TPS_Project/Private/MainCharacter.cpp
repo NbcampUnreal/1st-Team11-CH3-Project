@@ -203,7 +203,7 @@ void AMainCharacter::GameOver()
         AMainGameState* MainGameState = GetWorld()->GetGameState<AMainGameState>();
         if (MainGameState)
         {
-            MainGameState->GameOver();
+            MainGameState->GameOver(false);
         }
     }
 }
