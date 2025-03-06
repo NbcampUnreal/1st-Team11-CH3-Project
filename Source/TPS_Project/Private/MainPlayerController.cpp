@@ -5,6 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Components/TextBlock.h"
 #include "MainGameState.h"
 
@@ -203,5 +204,65 @@ void AMainPlayerController::StartGame()
 	SetInputMode(FInputModeGameOnly());
 
     // GameState에서 UI들 켜주기 (맵 바뀐상태)에서
+}
+
+void AMainPlayerController::StartMainMenu()
+{
+    UGameplayStatics::OpenLevel(GetWorld(), FName("MenuLevel"));
+}
+
+void AMainPlayerController::ShowGameOverMenu(bool bIsClear)
+{
+    // 메뉴를 보여주려면 현재 보여지고 있는 위젯을 제거해야함
+    if (HUDWidgetInstance)
+    {
+        HUDWidgetInstance->RemoveFromParent();
+        HUDWidgetInstance = nullptr;
+    }
+
+    if (MainMenuWidgetInstance)
+    {
+        MainMenuWidgetInstance->RemoveFromParent();
+        MainMenuWidgetInstance = nullptr;
+    }
+
+    if (GameOverMenuWidgetInstance)
+    {
+        GameOverMenuWidgetInstance->RemoveFromParent();
+        GameOverMenuWidgetInstance = nullptr;
+    }
+
+    if (GameOverMenuWidgetClass)
+    {
+        GameOverMenuWidgetInstance = CreateWidget<UUserWidget>(this, GameOverMenuWidgetClass);
+
+        if (GameOverMenuWidgetInstance)
+        {
+            GameOverMenuWidgetInstance->AddToViewport();
+
+            bShowMouseCursor = true;
+            SetInputMode(FInputModeUIOnly());
+
+            if (bIsClear)
+            {
+                if (UTextBlock* GameOverText = Cast<UTextBlock>(GameOverMenuWidgetInstance->GetWidgetFromName(TEXT("GameOverText"))))
+                {
+                    GameOverText->SetText(FText::FromString(TEXT("Clear")));
+                }
+            }
+            else
+            {
+                if (UTextBlock* GameOverText = Cast<UTextBlock>(GameOverMenuWidgetInstance->GetWidgetFromName(TEXT("GameOverText"))))
+                {
+                    GameOverText->SetText(FText::FromString(TEXT("Game Over")));
+                }
+            }
+        }
+    }
+}
+
+void AMainPlayerController::ExitGame()
+{
+    UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, false);
 }
 
