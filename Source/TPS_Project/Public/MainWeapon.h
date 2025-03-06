@@ -5,6 +5,7 @@
 #include "MainWeapon.generated.h"
 
 class UNiagaraComponent;
+class UNiagaraSystem;
 
 
 UCLASS()
@@ -47,6 +48,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
     UNiagaraComponent* MuzzleFlash;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    UNiagaraSystem* ShotImpact;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    UNiagaraSystem* ShotTracer;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
     USoundBase* GunFireSound;
 
@@ -56,6 +63,8 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
     USoundBase* EmptyAmmoSound;
 
+    //UFUNCTION(BlueprintCallable, Category = "LineTrace")
+    //void ShootLineTrace();
    
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Debug", meta = (AllowPrivateAccess = "true"))

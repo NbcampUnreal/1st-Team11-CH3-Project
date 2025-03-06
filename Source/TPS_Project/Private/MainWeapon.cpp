@@ -3,6 +3,7 @@
 #include "DrawDebugHelpers.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 
@@ -73,7 +74,19 @@ void AMainWeapon::PerformLineTrace()
     {
         UE_LOG(LogTemp, Warning, TEXT("Hit Object: %s"), *HitResult.GetActor()->GetName());
 
-        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 12, FColor::Red, false, 2.0f);
+        if (ShotImpact)
+        {
+            UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+                GetWorld(),
+                ShotImpact,
+                HitResult.ImpactPoint,
+                HitResult.ImpactNormal.Rotation(),
+                FVector(1.0f),
+                true
+            );
+        }
+
+        //DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 12, FColor::Red, false, 2.0f);
         AActor* HitActor = HitResult.GetActor();
         if (HitActor->ActorHasTag("Enemy"))
         {
@@ -81,7 +94,7 @@ void AMainWeapon::PerformLineTrace()
         }
     }
 
-    DrawDebugLine(GetWorld(), CameraLocation, EndLocation, FColor::Blue, false, 2.0f, 0, 1.0f);
+    //DrawDebugLine(GetWorld(), CameraLocation, EndLocation, FColor::Blue, false, 2.0f, 0, 1.0f);
 }
 
 void AMainWeapon::Reload()
