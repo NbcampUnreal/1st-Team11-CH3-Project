@@ -9,6 +9,7 @@ class UNiagaraSystem;
 class ATracerProjectile;
 
 
+
 UCLASS()
 class TPS_PROJECT_API AMainWeapon : public AActor
 {
@@ -19,7 +20,7 @@ public:
     void StartFire();
     void Reload();
     float GetFireRate() const;
-    void ActivateSoundParticle();
+    void ActivateSoundParticle(const FVector& StartPos, FVector EndPos);
     int GetMaxAmmo() const;
     int CurrentAmmo() const;
 protected:
@@ -50,7 +51,15 @@ protected:
     UNiagaraComponent* MuzzleFlash;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    UNiagaraComponent* ShotTracerComponent;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
     UNiagaraSystem* ShotImpact;
+
+
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
+    UNiagaraSystem* ShotTracerSystem;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Particle")
     TSubclassOf<ATracerProjectile> TracerClass;

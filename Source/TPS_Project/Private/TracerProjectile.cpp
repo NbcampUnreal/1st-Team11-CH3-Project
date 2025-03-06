@@ -2,52 +2,42 @@
 
 
 #include "TracerProjectile.h"
+#include "NiagaraDataInterfaceArrayFunctionLibrary.h"
 
 // Sets default values
 ATracerProjectile::ATracerProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
     TracerEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TracerEffect"));
-    RootComponent = TracerEffect;
+    SetRootComponent(TracerEffect);
+    // RootComponent = TracerEffect;
 
 }
 
-void ATracerProjectile::InitTracer(const FVector& StartPoint, const FVector& EndPoint)
+void ATracerProjectile::InitTracer(const FVector& StartPos, const TArray<FVector>& EndPos)
 {
-    SetActorLocation(StartPoint);
-    TargetLocation = EndPoint;
+    //SetActorLocation(StartPos);
 
-    // Niagara 파티클 활성화
     if (TracerEffect)
     {
         TracerEffect->Activate();
+
+        TracerEffect->SetVariablePosition(TEXT("User.MuzzlePosition"), StartPos);
+        UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(TracerEffect, TEXT("User.ImpactPositions"), EndPos);
+        TracerEffect->SetNiagaraVariableBool(TEXT("User.Trigger"), true);
     }
 }
 
 // Called when the game starts or when spawned
 void ATracerProjectile::BeginPlay()
 {
-	Super::BeginPlay();
-	
-}
+    Super::BeginPlay();
 
-// Called every frame
-void ATracerProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-    FVector CurrentLocation = GetActorLocation();
-    FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
-    float Distance = FVector::Dist(CurrentLocation, TargetLocation);
-
-    if (Distance > 10.0f)  // 목표 지점까지 이동
+    if (!TracerEffect->GetAsset())
     {
-        FVector NewLocation = CurrentLocation + Direction * Speed * DeltaTime;
-        SetActorLocation(NewLocation);
-    }
-    else
-    {
-        Destroy();  // 목표 지점 도달 시 삭제
+        UE_LOG(LogTemp, Error, TEXT("TracerEffect does not have a valid Niagara system!"));
     }
 }
+
 

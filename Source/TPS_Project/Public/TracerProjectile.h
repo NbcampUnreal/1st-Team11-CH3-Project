@@ -16,7 +16,7 @@ class TPS_PROJECT_API ATracerProjectile : public AActor
 public:	
 
 	ATracerProjectile();
-    void InitTracer(const FVector& StartPoint, const FVector& EndPoint);
+    void InitTracer(const FVector& StartPos, const TArray<FVector>& EndPos);
 
 protected:
 
@@ -24,13 +24,11 @@ protected:
 private:
     UPROPERTY(VisibleAnywhere)
     UNiagaraComponent* TracerEffect;
+    
 
     FVector TargetLocation;
 
     UPROPERTY(EditAnywhere, Category = "Tracer")
     float Speed = 10000.0f;  // 탄환 속도
 public:	
-
-	virtual void Tick(float DeltaTime) override;
-
 };
