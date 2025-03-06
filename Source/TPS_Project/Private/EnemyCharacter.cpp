@@ -5,6 +5,8 @@
 #include "EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BehaviorTreeTypes.h"
 #include "GameFramework/DamageType.h"
 
 // Sets default values
@@ -43,6 +45,16 @@ void AEnemyCharacter::SetRightHitbox(ECollisionEnabled::Type CollisionEnabled)
 void AEnemyCharacter::Die()
 {
     DieCheker = true;
+    {
+        if (AAIController* AIController = Cast<AAIController>(GetController()))
+        {
+            AIController->StopMovement();
+            if (UBrainComponent* BrainComp = AIController->BrainComponent)
+            {
+                BrainComp->StopLogic("Die 함수 호출로 인한 정지");
+            }
+        }
+    }
     GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AEnemyCharacter::DestroyMyActor, 5.f, false);
 }
 
