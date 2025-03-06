@@ -210,12 +210,30 @@ void AMainCharacter::GameOver()
 
 int AMainCharacter::GetMaxAmmo() const
 {
-    return MainWeapon->GetMaxAmmo();
+    if (MainWeapon)
+    {
+        return MainWeapon->GetMaxAmmo();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("MainWeapon is nullptr"));
+        return 0; // 또는 기본값
+    }
+    //return MainWeapon->GetMaxAmmo();
 }
 
 int AMainCharacter::CurrentAmmo() const
 {
-    return MainWeapon->CurrentAmmo();
+    if (MainWeapon)
+    {
+        return MainWeapon->CurrentAmmo();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("MainWeapon is nullptr"));
+        return 0; // 또는 기본값
+    }
+    //return MainWeapon->CurrentAmmo();
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

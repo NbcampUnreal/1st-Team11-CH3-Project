@@ -26,6 +26,7 @@ void AMainGameState::BeginPlay()
     //TODO; 뭔가 있겠지..
 	Super::BeginPlay();
 
+   
     FString CurrentLevelName = GetWorld()->GetMapName();
     if (CurrentLevelName.Contains("DefenceLevel"))
     {
@@ -45,6 +46,10 @@ void AMainGameState::BeginPlay()
         // OnWorldPostActorTick : 현재 프레임 끝나기 직전에 실행
         //FWorldDelegates::OnWorldPostActorTick.AddUObject(this, &AMainGameState::UpdateLightFirstFrame);
     }
+
+
+  
+
 }
 
 // SkyLight 업데이트
@@ -405,7 +410,28 @@ void AMainGameState::UpdateHUD()
                }
            }
             
-            // UpdateHealthBar(); 
+
+            // 총알 텍스트 UI
+           if (UTextBlock* BulletCountText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("BulletCount"))))
+           {
+               ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+               AMainCharacter* MainPlayerCharacter = Cast<AMainCharacter>(PlayerCharacter);
+               if (MainPlayerCharacter)
+               {
+
+                   BulletCountText->SetText(FText::FromString(FString::Printf(TEXT("%d/%d"),
+                       MainPlayerCharacter->CurrentAmmo()
+                       ,MainPlayerCharacter->GetMaxAmmo())));
+
+               }
+               else
+               {
+                   BulletCountText->SetText(FText::FromString(TEXT("Ammo: N/A"))); // 안전한 기본값
+               }
+           }
+
+
+
 
             // 점수?
 
