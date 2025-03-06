@@ -71,8 +71,7 @@ void AMainWeapon::PerformLineTrace()
     float Distance = 10000.f;
 
     FVector EndLocation = CameraLocation + (Direction * Distance);
-    //TArray<FVector> Vectors;
-    //Vectors.Add(CameraLocation + FVector(350, 0, 0) + (Direction * Distance));
+
     ActivateSoundParticle(CameraLocation + FVector(700, 0, 0), CameraLocation + FVector(350, 0, 0) + (Direction * Distance));
     FHitResult HitResult;
     FCollisionQueryParams TraceParams;
@@ -85,10 +84,6 @@ void AMainWeapon::PerformLineTrace()
         ECC_Visibility,
         TraceParams
     );
-
-
-    //ShotTracer->Activate();
-
 
 
     if (bHit)
@@ -107,15 +102,12 @@ void AMainWeapon::PerformLineTrace()
             );
         }
 
-        //DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 12, FColor::Red, false, 2.0f);
         AActor* HitActor = HitResult.GetActor();
         if (HitActor->ActorHasTag("Enemy"))
         {
             UGameplayStatics::ApplyDamage(HitActor, Damage, nullptr, this, UDamageType::StaticClass());
         }
     }
-
-    //DrawDebugLine(GetWorld(), CameraLocation, EndLocation, FColor::Blue, false, 2.0f, 0, 1.0f);
 }
 
 void AMainWeapon::Reload()
@@ -142,18 +134,15 @@ void AMainWeapon::ActivateSoundParticle(const FVector& StartPos, const FVector E
 {
     MuzzleFlash->Activate();
 
-   /* ATracerProjectile* Tracer = GetWorld()->SpawnActor<ATracerProjectile>(TracerClass, StartPos, FRotator::ZeroRotator);
-    if (Tracer)
-    {
-        Tracer->InitTracer(StartPos, EndPos);
-    }*/
-
+    ShotTracerComponent->DeactivateImmediate();
+   
 
     TArray<FVector> EndPoss;
     EndPoss.Add(EndPos);
 
     ShotTracerComponent->SetVariablePosition(TEXT("User.MuzzlePosition"), WeaponMesh->GetComponentLocation());
     UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(ShotTracerComponent, TEXT("User.ImpactPositions"), EndPoss);
+    //ShotTracerComponent->SetVariablePosition(TEXT("User.ImpactPositions"), EndPos);
     ShotTracerComponent->SetNiagaraVariableBool(TEXT("User.Trigger"), true);
     ShotTracerComponent->Activate();
 
