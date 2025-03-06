@@ -20,7 +20,7 @@ public:
     void StartFire();
     void Reload();
     float GetFireRate() const;
-    void ActivateSoundParticle(const FVector& StartPos, FVector EndPos);
+    void ActivateSoundParticle(const FVector& StartPos, const FVector EndPos);
     int GetMaxAmmo() const;
     int CurrentAmmo() const;
 protected:

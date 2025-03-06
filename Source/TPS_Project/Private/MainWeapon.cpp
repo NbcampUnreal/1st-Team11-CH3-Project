@@ -138,13 +138,9 @@ void AMainWeapon::FinishReload()
     UE_LOG(LogTemp, Warning, TEXT("재장전 완료, 탄약 : %d"), AmmoCount);
 }
 
-void AMainWeapon::ActivateSoundParticle(const FVector& StartPos, FVector EndPos)
+void AMainWeapon::ActivateSoundParticle(const FVector& StartPos, const FVector EndPos)
 {
     MuzzleFlash->Activate();
-
-    //ShotTracerComponent->SetVectorParameter(TEXT("MuzzlePosition"), StartPos);
-    //UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(ShotTracerComponent, TEXT("ImpactPositions"), EndPos);
-    //ShotTracerComponent->Activate();
 
    /* ATracerProjectile* Tracer = GetWorld()->SpawnActor<ATracerProjectile>(TracerClass, StartPos, FRotator::ZeroRotator);
     if (Tracer)
@@ -152,19 +148,16 @@ void AMainWeapon::ActivateSoundParticle(const FVector& StartPos, FVector EndPos)
         Tracer->InitTracer(StartPos, EndPos);
     }*/
 
-    //UE_LOG(LogTemp, Error, TEXT("%d"), EndPos.Num());
 
     TArray<FVector> EndPoss;
     EndPoss.Add(EndPos);
 
     ShotTracerComponent->SetVariablePosition(TEXT("User.MuzzlePosition"), WeaponMesh->GetComponentLocation());
-
-    UE_LOG(LogTemp, Error, TEXT("%d"), EndPoss.Num());
     UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(ShotTracerComponent, TEXT("User.ImpactPositions"), EndPoss);
     ShotTracerComponent->SetNiagaraVariableBool(TEXT("User.Trigger"), true);
-
-
     ShotTracerComponent->Activate();
+
+
     UGameplayStatics::PlaySoundAtLocation(this, GunFireSound, GetActorLocation());
 }
 
