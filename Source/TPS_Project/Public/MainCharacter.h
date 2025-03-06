@@ -58,6 +58,10 @@ protected:
 
     FTimerHandle FireTimer;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character|Health")
+    float MaxHealth;
+    float Health;
+
 public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -105,7 +109,6 @@ public:
     int CurrentAmmo() const;
 
 private:
-    float Health;
     int Ammo;
     bool bIsGameOver;
     float FireRate;

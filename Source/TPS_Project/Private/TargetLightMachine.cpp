@@ -86,7 +86,7 @@ void ATargetLightMachine::UpdateOverheadHP()
         if (MaxHealth > 0.f)
         {
             
-            HPPercent = Health / 100.f;
+            HPPercent = Health / MaxHealth;
         }
         HPBar->SetPercent(HPPercent);
 

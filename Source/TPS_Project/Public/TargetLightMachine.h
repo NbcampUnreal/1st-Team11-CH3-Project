@@ -31,6 +31,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Target|Health")
 	float MaxHealth;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Target|Health")
 	float Health;
 
 

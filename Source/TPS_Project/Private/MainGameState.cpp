@@ -209,8 +209,6 @@ void AMainGameState::StartGame()
         );
     }
 
-    GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Start Game : %s"), *CurrentLevel.ToString()));
-
     if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find(CurrentLevel))
     {
         for (TSoftObjectPtr<AActor> SoftSpawnVolume : SpawnVolumes->SpawnVolumes)
@@ -325,8 +323,6 @@ void AMainGameState::DefenceLevelTimeUp()
 
 void AMainGameState::GameOver(bool bIsClear)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Game Over!")));
-
     if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
     {
         if (AMainPlayerController* MainPlayerController = Cast<AMainPlayerController>(PlayerController))

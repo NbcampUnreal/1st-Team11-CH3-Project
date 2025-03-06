@@ -21,7 +21,8 @@ AMainCharacter::AMainCharacter() : MainWeapon(nullptr)
     bIsGameOver = false;
     NormalSpeed = 600.0f;
     bHasDamage = false;
-    Health = 100.f;
+    MaxHealth = 100.0f;
+    Health = MaxHealth;
 }
 
 // Called when the game starts or when spawned
@@ -132,6 +133,11 @@ float AMainCharacter::GetCharacterHealth() const
 void AMainCharacter::SetCharacterHealth(float Value)
 {
     Health += Value;
+
+    if (Health >= MaxHealth)
+    {
+        Health = MaxHealth;
+    }
 }
 
 void AMainCharacter::PlayDamageAnim()
