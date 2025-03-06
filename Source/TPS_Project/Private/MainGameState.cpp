@@ -17,8 +17,8 @@ AMainGameState::AMainGameState()
     CurrentLevel = "";
 	WaveCount = 0;
 	MaxWaveCount = 5;
-	WaveInterval = 10.0f;
-	DefenceTime = 60.0f;
+	WaveInterval = 30.0f;
+	DefenceTime = 180.0f;
 }
 
 void AMainGameState::BeginPlay()
@@ -46,9 +46,6 @@ void AMainGameState::BeginPlay()
         // OnWorldPostActorTick : 현재 프레임 끝나기 직전에 실행
         //FWorldDelegates::OnWorldPostActorTick.AddUObject(this, &AMainGameState::UpdateLightFirstFrame);
     }
-
-
-  
 
 }
 
@@ -227,7 +224,7 @@ void AMainGameState::StartGame()
     GetWorldTimerManager().SetTimer(LevelTimerHandle, this, &AMainGameState::DefenceLevelTimeUp, DefenceTime, false);
   
     // Wave 타이머
-    GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 5.0f);
+    GetWorldTimerManager().SetTimer(WaveStartTimerHandle, this, &AMainGameState::StartWave, WaveInterval, true, 20.0f);
 }
 
 // 스폰 주기 감소 -> 마리 수 증가
@@ -254,6 +251,8 @@ void AMainGameState::StartWave()
         return;
     }
 
+    UE_LOG(LogTemp, Warning, TEXT("Start Wave : %d"), WaveCount + 1);
+
     // Find(key)는 TMap에 Key가 들어있으면 value의 포인터를 반환하고, 없으면 nullptr 반환
     if (FActorArray* SpawnVolumes = SpawnVolumesByLevel.Find(CurrentLevel))
     {
@@ -263,7 +262,7 @@ void AMainGameState::StartWave()
             {
                 if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
                 {
-                    ZombieSpawnVolume->SpawnInterval = 1.0f;
+                    ZombieSpawnVolume->SpawnInterval = 3.5f;
                 }
             }
         }
@@ -290,7 +289,7 @@ void AMainGameState::EndWave()
             {
                 if (AZombieSpawnVolume* ZombieSpawnVolume = Cast<AZombieSpawnVolume>(SpawnVolume))
                 {
-                    ZombieSpawnVolume->SpawnInterval = 2.0f;
+                    ZombieSpawnVolume->SpawnInterval = 7.0f;
                 }
             }
         }
@@ -314,11 +313,8 @@ void AMainGameState::DefenceLevelTimeUp()
             }
         }
     }
-
-    if (CurrentLevel == "BossLevel")
-    {
-        GameOver(true);
-    }
+   
+    GameOver(true);
 }
 
 void AMainGameState::GameOver(bool bIsClear)

@@ -12,7 +12,7 @@ AZombieSpawnVolume::AZombieSpawnVolume()
 	SpawningBox->SetupAttachment(Scene);
 
 	bIsSpawn = false;
-	SpawnInterval = 2.0f;
+	SpawnInterval = 7.0f;
 
 	ZombieDataTable = nullptr;
 
