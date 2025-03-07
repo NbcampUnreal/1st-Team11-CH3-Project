@@ -35,7 +35,7 @@ cpp_space_before_semicolon = false
 cpp_space_after_semicolon = true
 cpp_space_around_binary_operator = single
 cpp_space_around_assignment_operator = single
-cpp_space_pointer_reference_alignment = right
+cpp_space_pointer_reference_alignment = left
 cpp_space_around_ternary_operator = single
 
 # 정리 (Include Cleanup) 설정

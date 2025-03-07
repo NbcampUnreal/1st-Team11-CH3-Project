@@ -1,4 +1,3 @@
-
 {
 	"FileVersion": 3,
 	"EngineAssociation": "5.4",
@@ -10,7 +9,8 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine",
+				"AIModule"
 			]
 		}
 	],
@@ -23,5 +23,4 @@
 			]
 		}
 	]
-
 }
