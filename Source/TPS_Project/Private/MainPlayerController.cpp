@@ -33,16 +33,12 @@ void AMainPlayerController::BeginPlay()
 
 	SubSystem->AddMappingContext(InputMappingContext, 0);
 
-
-
 	// 게임 실행 시 메뉴 레벨에서 메뉴 UI 먼저 표시되도록 
 	FString CurrentMapName=GetWorld()->GetMapName();
 	if ( CurrentMapName.Contains("MenuLevel") )
 	{
 		ShowMainMenu(false); // false 는 처음 시작 나타냄 
 	}
-
-
 
     // 디펜스레벨로 바뀌었다면..
     FString CurrentLevelName = GetWorld()->GetMapName();
@@ -51,9 +47,8 @@ void AMainPlayerController::BeginPlay()
 
         ShowGameHud();
 
-
         // 미션 UI 생성 로직
-         // 미션 UI 
+        // 미션 UI 
         APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
         if (!PC)
         {
@@ -91,15 +86,12 @@ void AMainPlayerController::BeginPlay()
         {
             MissionWidget->ProcessEvent(PlayAnimFunc, nullptr);
         }
-
     }
 }
 
-//
 void AMainPlayerController::ShowMainMenu(bool bIsRestart)
 {
 	// HUD 있다면 닫기
-
 
 	// 이미 메인 메뉴가 떠 있다면 제거하기
 	if ( MainMenuWidgetInstance )
@@ -135,9 +127,6 @@ void AMainPlayerController::ShowMainMenu(bool bIsRestart)
 			}
 		}
 	}
-
-
-
 }
 
 void AMainPlayerController::ShowGameHud()
@@ -172,7 +161,6 @@ void AMainPlayerController::ShowGameHud()
             {
                 MainGameState->UpdateHUD();
             }
-
         }
     }
 }
@@ -184,26 +172,10 @@ UUserWidget* AMainPlayerController::GetHUDWidget() const
 
 void AMainPlayerController::StartGame()
 {
-	// 게임인스턴스 있으면 데이터 리셋
-
 	UGameplayStatics::OpenLevel(GetWorld(), FName("DefenceLevel"));
-
-
-    //AMainGameState* MainGameState = GetWorld()->GetGameState<AMainGameState>();
-    //if (MainGameState)
-    //{
-    //    //MainGameState->SetCurrentLevel("DefenceLevel");
-    //    MainGameState->StartGame();
-    //}
-    //
-
-
 	
-	// todo; 임시방편으로,.. 원래 HUD 안에서 해야함
 	bShowMouseCursor=false;
 	SetInputMode(FInputModeGameOnly());
-
-    // GameState에서 UI들 켜주기 (맵 바뀐상태)에서
 }
 
 void AMainPlayerController::StartMainMenu()
